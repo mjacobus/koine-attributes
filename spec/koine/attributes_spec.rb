@@ -1,11 +1,135 @@
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe Koine::Attributes do
-  it "has a version number" do
-    expect(Koine::Attributes::VERSION).not_to be nil
+  let(:driver) do
+    Class.new do
+      attr_reader :default, :append
+      def initialize(default: 'default value', append: 'coerced')
+        @default = default
+        @append = append
+      end
+
+      def coerce(*values)
+        value = values.first
+        "#{value}-#{append}"
+      end
+    end
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  let(:klass) do
+    name_driver = driver.new
+    last_name_driver = driver.new(default: 'default last name', append: 'last')
+
+    Class.new do
+      include Koine::Attributes
+
+      attributes do
+        attribute :name, name_driver
+        attribute :last_name, last_name_driver
+      end
+    end
+  end
+
+  let(:klass_with_constructor) do
+    name_driver = driver.new
+    last_name_driver = driver.new(default: 'default last name', append: 'last')
+
+    Class.new do
+      include Koine::Attributes
+
+      attributes initializer: true do
+        attribute :name, name_driver
+        attribute :last_name, last_name_driver
+      end
+    end
+  end
+
+  let(:klass_with_strict_constructor) do
+    name_driver = driver.new
+    last_name_driver = driver.new(default: 'default last name', append: 'last')
+
+    Class.new do
+      include Koine::Attributes
+
+      attributes initializer: { strict: true } do
+        attribute :name, name_driver
+        attribute :last_name, last_name_driver
+      end
+    end
+  end
+
+  describe '.attributes => attribute' do
+    describe 'with no arguments' do
+      it 'creates a getter' do
+        expect(klass.new).to respond_to(:name)
+        expect(klass.new).to respond_to(:last_name)
+      end
+
+      it 'creates a setter' do
+        expect(klass.new).to respond_to(:name=)
+        expect(klass.new).to respond_to(:last_name=)
+      end
+
+      it 'does not create a constructor' do
+        expect do
+          klass.new(name: 'foo')
+        end.to raise_error(ArgumentError, /wrong number of arguments/)
+      end
+
+      describe 'getters' do
+        subject { klass.new }
+
+        it 'returns default when no value was given' do
+          expect(subject.name).to eq('default value')
+          expect(subject.last_name).to eq('default last name')
+        end
+
+        it 'returns the coerced value when values are set' do
+          subject.name = 'john'
+          subject.last_name = 'doe'
+
+          expect(subject.name).to eq('john-coerced')
+          expect(subject.last_name).to eq('doe-last')
+        end
+      end
+    end
+
+    describe 'with initializer: true' do
+      subject do
+        klass_with_constructor.new(
+          name: 'john',
+          'last_name' => 'doe',
+          foo: 'bar'
+        )
+      end
+
+      it 'assigns attributes from the constructor' do
+        expect(subject.name).to eq('john-coerced')
+        expect(subject.last_name).to eq('doe-last')
+      end
+    end
+
+    describe 'with initializer: { strict: true }' do
+      it 'assigns attributes from the constructor' do
+        subject = klass_with_strict_constructor.new(
+          name: 'john',
+          'last_name' => 'doe'
+        )
+
+        expect(subject.name).to eq('john-coerced')
+        expect(subject.last_name).to eq('doe-last')
+      end
+
+      it 'raises error when initialize with invalid arguments' do
+        expect do
+          klass_with_strict_constructor.new(
+            name: 'john',
+            'last_name' => 'doe',
+            age: 18,
+            'likes_footbol' => true
+          )
+        end.to raise_error(ArgumentError, 'Invalid attributes (age, likes_footbol)')
+      end
+    end
   end
 end
