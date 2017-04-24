@@ -22,7 +22,26 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+class Product
+  include Koine::Attributes
+
+  attribute :price, MyCustom::Money.new
+  attribute :available, :boolean, ->(attribues){ attributes.with_default(true) }
+  attribute :available, Koine::Attributes::Drivers::Boolean.new.with_default(true)
+end
+
+product = Product.new
+
+product.available #  => true
+product.available = 0
+product.available #  => false
+
+product.price = { currency: 'USD', value: 100 }
+
+# or
+product.price = "100 USD"
+```
 
 ## Development
 
