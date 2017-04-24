@@ -15,9 +15,7 @@ module Koine
         if options[:initializer]
           initializer_options = options[:initializer]
 
-          unless initializer_options.is_a?(Hash)
-            initializer_options = { strict: false }
-          end
+          initializer_options = {} unless initializer_options.is_a?(Hash)
 
           @builder.build_constructor(initializer_options)
         end

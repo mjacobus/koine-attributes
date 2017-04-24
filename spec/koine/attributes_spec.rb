@@ -4,6 +4,7 @@ RSpec.describe Koine::Attributes do
   let(:driver) do
     Class.new do
       attr_reader :default, :append
+
       def initialize(default: 'default value', append: 'coerced')
         @default = default
         @append = append
@@ -37,7 +38,7 @@ RSpec.describe Koine::Attributes do
     Class.new do
       include Koine::Attributes
 
-      attributes initializer: true do
+      attributes initializer: { strict: false } do
         attribute :name, name_driver
         attribute :last_name, last_name_driver
       end
@@ -51,7 +52,7 @@ RSpec.describe Koine::Attributes do
     Class.new do
       include Koine::Attributes
 
-      attributes initializer: { strict: true } do
+      attributes initializer: true do
         attribute :name, name_driver
         attribute :last_name, last_name_driver
       end
@@ -94,7 +95,7 @@ RSpec.describe Koine::Attributes do
       end
     end
 
-    describe 'with initializer: true' do
+    describe 'with initializer: { strict: false }' do
       subject do
         klass_with_constructor.new(
           name: 'john',
@@ -109,7 +110,7 @@ RSpec.describe Koine::Attributes do
       end
     end
 
-    describe 'with initializer: { strict: true }' do
+    describe 'with initializer: true' do
       it 'assigns attributes from the constructor' do
         subject = klass_with_strict_constructor.new(
           name: 'john',

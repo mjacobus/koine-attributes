@@ -35,7 +35,7 @@ module Koine
         end
       end
 
-      def build_constructor(strict: false)
+      def build_constructor(strict: true)
         valid_attributes = attributes
 
         target.class_eval do
