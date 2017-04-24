@@ -1,6 +1,65 @@
 require 'koine/attributes/version'
 require 'koine/attributes/builder'
 
+# provides the following API
+#
+#   ```ruby
+#   class Person
+#     attributes do
+#       attribute :name, :string
+#       attribute :birthday, :date
+#
+#       # or
+#       attribute :birthday, Koine::Attributes::Adapter::Date.new
+#     end
+#   end
+#
+#   peson = Person.new
+#   person.name = 'John Doe'
+#   person.birtday = '2001-02-31' # Date Object can also be given
+#
+#   person.name # => 'John Doe'
+#   person.birtday # => #<Date 2001-02-31>
+#   ```
+#
+#   ```ruby
+#     attributes do
+#       attribute :name, Koine::Attributes::Adapters::Date.new.with_default('guest')
+#
+#       # or
+#       attribute :name, :string, ->(adapter) { adapter.with_default('guest') }
+#     end
+#   ```
+#
+# Also, a constructor can be created by the API
+#
+#   ```ruby
+#   class Person
+#     attributes constructor: true do
+#       attribute :name, :string
+#       attribute :birthday, :date
+#     end
+#   end
+#
+#   person = Person.new(name: 'John Doe', birthday: '2001-01-31')
+#
+#   foo: attribute will raise error
+#   person = Person.new(name: 'John Doe', birthday: '2001-01-31', foo: :bar)
+#   ```
+#
+# You can disable strict mode
+#
+#   ```ruby
+#   class Person
+#     attributes constructor: { strict: false } do
+#       attribute :name, :string
+#       attribute :birthday, :date
+#     end
+#   end
+#
+#   # foo will be ignored
+#   person = Person.new(name: 'John Doe', birthday: '2001-01-31', foo: :bar)
+#   ```
 module Koine
   module Attributes
     def self.included(base)

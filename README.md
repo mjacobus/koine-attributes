@@ -22,13 +22,75 @@ Or install it yourself as:
 
 ## Usage
 
+ ```ruby
+ class person
+   attributes do
+     attribute :name, :string
+     attribute :birthday, :date
+
+     # or
+     attribute :birthday, Koine::Attributes::Adapter::Date.new
+   end
+ end
+
+ peson = Person.new
+ person.name = 'John Doe'
+ person.birtday = '2001-02-31' # Date Object can also be given
+
+ person.name # => 'John Doe'
+ person.birtday # => #<Date 2001-02-31>
+ ```
+
+Options:
+
+ ```ruby
+ attributes do
+   attribute :name, Koine::Attributes::Adapters::Date.new.with_default('guest')
+
+   # or
+   attribute :name, :string, ->(adapter) { adapter.with_default('guest') }
+ end
+```
+
+ Also, a constructor can be created by the API
+
+ ```ruby
+ class Person
+   attributes constructor: true do
+     attribute :name, :string
+     attribute :birthday, :date
+   end
+ end
+
+ person = Person.new(name: 'John Doe', birthday: '2001-01-31')
+
+ foo: attribute will raise error
+ person = Person.new(name: 'John Doe', birthday: '2001-01-31', foo: :bar)
+ ```
+
+ You can disable strict mode
+
+ ```ruby
+ class Person
+   attributes constructor: { strict: false } do
+     attribute :name, :string
+     attribute :birthday, :date
+   end
+ end
+
+ # foo will be ignored
+ person = Person.new(name: 'John Doe', birthday: '2001-01-31', foo: :bar)
+ ```
+
 ```ruby
 class Product
   include Koine::Attributes
 
-  attribute :price, MyCustom::Money.new
-  attribute :available, :boolean, ->(attribues){ attributes.with_default(true) }
-  attribute :available, Koine::Attributes::Drivers::Boolean.new.with_default(true)
+  attributes do
+    attribute :price, MyCustom::Money.new
+    attribute :available, :boolean, ->(attribues){ attributes.with_default(true) }
+    attribute :available, Koine::Attributes::Drivers::Boolean.new.with_default(true)
+  end
 end
 
 product = Product.new
