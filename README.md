@@ -56,7 +56,7 @@ Options:
 
  ```ruby
  class Person
-   attributes constructor: true do
+   attributes initializer: true do
      attribute :name, :string
      attribute :birthday, :date
    end
@@ -72,7 +72,7 @@ Options:
 
  ```ruby
  class Person
-   attributes constructor: { strict: false } do
+   attributes initializer: { strict: false } do
      attribute :name, :string
      attribute :birthday, :date
    end
