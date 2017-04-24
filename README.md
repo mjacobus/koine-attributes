@@ -43,6 +43,29 @@ product.price = { currency: 'USD', value: 100 }
 product.price = "100 USD"
 ```
 
+```ruby
+class MyCustom::Money
+  def default
+    return 'some default'
+  end
+
+  def coerce(*values)
+    Money.new(values.first, values.last)
+  end
+end
+
+product = Product.new
+
+product.available #  => true
+product.available = 0
+product.available #  => false
+
+product.price = { currency: 'USD', value: 100 }
+
+# or
+product.price = "100 USD"
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
