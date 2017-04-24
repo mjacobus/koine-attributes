@@ -59,7 +59,7 @@ RSpec.describe Koine::Attributes do
     end
   end
 
-  describe '.attributes => attribute' do
+  describe '.attributes -> { attribute :attribute_name, :driver }' do
     describe 'with no arguments' do
       it 'creates a getter' do
         expect(klass.new).to respond_to(:name)
@@ -76,42 +76,40 @@ RSpec.describe Koine::Attributes do
           klass.new(name: 'foo')
         end.to raise_error(ArgumentError, /wrong number of arguments/)
       end
+    end
+  end
 
-      describe 'getters' do
-        subject { klass.new }
+  describe 'getters created by the module' do
+    subject { klass.new }
 
-        it 'returns default when no value was given' do
-          expect(subject.name).to eq('default value')
-          expect(subject.last_name).to eq('default last name')
-        end
-
-        it 'returns the coerced value when values are set' do
-          subject.name = 'john'
-          subject.last_name = 'doe'
-
-          expect(subject.name).to eq('john-coerced')
-          expect(subject.last_name).to eq('doe-last')
-        end
-      end
+    it 'returns default when no value was given' do
+      expect(subject.name).to eq('default value')
+      expect(subject.last_name).to eq('default last name')
     end
 
-    describe 'with initializer: { strict: false }' do
-      subject do
-        klass_with_constructor.new(
-          name: 'john',
-          'last_name' => 'doe',
-          foo: 'bar'
-        )
-      end
+    it 'returns the coerced value when values are set' do
+      subject.name = 'john'
+      subject.last_name = 'doe'
 
-      it 'assigns attributes from the constructor' do
+      expect(subject.name).to eq('john-coerced')
+      expect(subject.last_name).to eq('doe-last')
+    end
+  end
+
+  describe '.attributes initializer: option' do
+    context 'when { strict: false }' do
+      it 'assigns attributes from the constructor but does not raise error for invalid attributes' do
+        attributes = { name: 'john', 'last_name' => 'doe', foo: 'bar' }
+
+        subject = klass_with_constructor.new(attributes)
+
         expect(subject.name).to eq('john-coerced')
         expect(subject.last_name).to eq('doe-last')
       end
     end
 
     describe 'with initializer: true' do
-      it 'assigns attributes from the constructor' do
+      it 'assigns valid attributes from the constructor' do
         subject = klass_with_strict_constructor.new(
           name: 'john',
           'last_name' => 'doe'
@@ -122,13 +120,15 @@ RSpec.describe Koine::Attributes do
       end
 
       it 'raises error when initialize with invalid arguments' do
+        invalid_attributes = {
+          name: 'john',
+          'last_name' => 'doe',
+          age: 18,
+          'likes_footbol' => true
+        }
+
         expect do
-          klass_with_strict_constructor.new(
-            name: 'john',
-            'last_name' => 'doe',
-            age: 18,
-            'likes_footbol' => true
-          )
+          klass_with_strict_constructor.new(invalid_attributes)
         end.to raise_error(ArgumentError, 'Invalid attributes (age, likes_footbol)')
       end
     end
