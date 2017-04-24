@@ -133,4 +133,16 @@ RSpec.describe Koine::Attributes do
       end
     end
   end
+
+  describe '.attribute' do
+    it 'raises error when called outside the block' do
+      expect do
+        Class.new do
+          include Koine::Attributes
+
+          attribute :name, :driver
+        end
+      end.to raise_error(Koine::Attributes::Error, 'You must call .attribute inside the .attributes block')
+    end
+  end
 end

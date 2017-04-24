@@ -62,6 +62,8 @@ require 'koine/attributes/builder'
 #   ```
 module Koine
   module Attributes
+    Error = Class.new(StandardError)
+
     def self.included(base)
       base.extend(ClassMethods)
     end
@@ -83,6 +85,9 @@ module Koine
       end
 
       def attribute(name, driver)
+        unless @builder
+          raise Error, 'You must call .attribute inside the .attributes block'
+        end
         @builder.build(name, driver)
       end
     end
