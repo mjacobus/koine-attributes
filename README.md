@@ -1,8 +1,12 @@
 # Koine::Attributes
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/koine/attributes`. To experiment with that code, run `bin/console` for an interactive prompt.
+Strong attributes for ruby ruby objects.
 
-TODO: Delete this and the text above, and describe your gem
+[![Build Status](https://travis-ci.org/mjacobus/koine-attributes.svg?branch=master)](https://travis-ci.org/mjacobus/koine-attributes)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mjacobus/koine-attributes/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mjacobus/koine-attributes/?branch=master)
+[![Code Climate](https://codeclimate.com/github/mjacobus/koine-attributes/badges/gpa.svg)](https://codeclimate.com/github/mjacobus/koine-attributes)
+[![Issue Count](https://codeclimate.com/github/mjacobus/koine-attributes/badges/issue_count.svg)](https://codeclimate.com/github/mjacobus/koine-attributes)
+[![Dependency Status](https://gemnasium.com/badges/github.com/mjacobus/koine-attributes.svg)](https://gemnasium.com/github.com/mjacobus/koine-attributes)
 
 ## Installation
 
