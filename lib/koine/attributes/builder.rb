@@ -39,7 +39,13 @@ module Koine
         valid_attributes = attributes
 
         target.class_eval do
-          define_method(:initialize) do |constructor_args|
+          def initialize(args = {})
+            initialize_attributes(args)
+          end
+
+          protected
+
+          define_method(:initialize_attributes) do |constructor_args|
             invalid_attributes = []
             constructor_args = HashHelper.new.symbolize_keys(constructor_args)
 

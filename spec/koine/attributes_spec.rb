@@ -97,6 +97,13 @@ RSpec.describe Koine::Attributes do
   end
 
   describe '.attributes initializer: option' do
+    it 'creates a constructor that delegates to protected #initialize_attributes' do
+      subject = klass_with_constructor.new
+
+      expect(subject).not_to respond_to(:initialize_attributes)
+      expect(subject.respond_to?(:initialize_attributes, true)).to be(true)
+    end
+
     context 'when { strict: false }' do
       it 'assigns attributes from the constructor but does not raise error for invalid attributes' do
         attributes = { name: 'john', 'last_name' => 'doe', foo: 'bar' }
@@ -109,6 +116,10 @@ RSpec.describe Koine::Attributes do
     end
 
     describe 'with initializer: true' do
+      it 'can be initialized with no arguments' do
+        klass_with_strict_constructor.new
+      end
+
       it 'assigns valid attributes from the constructor' do
         subject = klass_with_strict_constructor.new(
           name: 'john',
