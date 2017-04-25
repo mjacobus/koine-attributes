@@ -3,7 +3,7 @@ require 'koine/attributes/builder'
 
 # provides the following API
 #
-#   ```ruby
+# @example using attributes
 #   class Person
 #     attributes do
 #       attribute :name, :string
@@ -20,20 +20,18 @@ require 'koine/attributes/builder'
 #
 #   person.name # => 'John Doe'
 #   person.birtday # => #<Date 2001-02-31>
-#   ```
 #
-#   ```ruby
+# @example custom attribute options
+#
 #     attributes do
 #       attribute :name, Koine::Attributes::Adapters::Date.new.with_default('guest')
 #
 #       # or
 #       attribute :name, :string, ->(adapter) { adapter.with_default('guest') }
 #     end
-#   ```
 #
-# Also, a constructor can be created by the API
+# @example Constructor for attributes
 #
-#   ```ruby
 #   class Person
 #     attributes initializer: true do
 #       attribute :name, :string
@@ -43,13 +41,11 @@ require 'koine/attributes/builder'
 #
 #   person = Person.new(name: 'John Doe', birthday: '2001-01-31')
 #
-#   foo: attribute will raise error
+#   # foo: attribute will raise error with strict mode
 #   person = Person.new(name: 'John Doe', birthday: '2001-01-31', foo: :bar)
-#   ```
 #
-# You can disable strict mode
+# @example Constructor for attributes withouth strict mode
 #
-#   ```ruby
 #   class Person
 #     attributes initializer: { strict: false } do
 #       attribute :name, :string
@@ -59,7 +55,27 @@ require 'koine/attributes/builder'
 #
 #   # foo will be ignored
 #   person = Person.new(name: 'John Doe', birthday: '2001-01-31', foo: :bar)
-#   ```
+#
+# @example Override constructor
+#
+#   class Person
+#     attr_reader :foo
+#
+#     attributes initializer: true do
+#       attribute :name, :string
+#       attribute :birthday, :date
+#     end
+#
+#     def initializ(attributes = {})
+#       @foo = attributes.delete(:foo)
+#
+#       initialize_attributes(attributes) # protected
+#     end
+#   end
+#
+#   person = Person.new(name: 'John Doe', birthday: '2001-01-31', foo: :bar)
+#   person.foo # => :bar
+#
 module Koine
   module Attributes
     Error = Class.new(StandardError)
