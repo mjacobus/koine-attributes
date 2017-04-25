@@ -10,7 +10,7 @@ namespace :test do
   desc "run tests and generate invoke coveralls"
   task :coveralls do
     ENV['COVERALLS'] = 'true'
-    Rake::Task[:coverage].invoke
+    Rake::Task['test:coverage'].invoke
   end
 
   desc "run tests and generate code coverage"
