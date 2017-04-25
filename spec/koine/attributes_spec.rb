@@ -146,7 +146,7 @@ RSpec.describe Koine::Attributes do
   end
 
   describe '.attribute' do
-    it 'raises error when called outside the block' do
+    it 'raises error when called outside the .attributes block' do
       expect do
         Class.new do
           include Koine::Attributes
