@@ -3,6 +3,7 @@
 Strong attributes for ruby ruby objects.
 
 [![Build Status](https://travis-ci.org/mjacobus/koine-attributes.svg?branch=master)](https://travis-ci.org/mjacobus/koine-attributes)
+[![Coverage Status](https://coveralls.io/repos/github/mjacobus/koine-attributes/badge.svg?branch=master)](https://coveralls.io/github/mjacobus/koine-attributes?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mjacobus/koine-attributes/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mjacobus/koine-attributes/?branch=master)
 [![Code Climate](https://codeclimate.com/github/mjacobus/koine-attributes/badges/gpa.svg)](https://codeclimate.com/github/mjacobus/koine-attributes)
 [![Issue Count](https://codeclimate.com/github/mjacobus/koine-attributes/badges/issue_count.svg)](https://codeclimate.com/github/mjacobus/koine-attributes)

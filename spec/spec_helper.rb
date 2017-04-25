@@ -1,3 +1,14 @@
+if ENV['COVERALLS']
+  require "coveralls"
+  Coveralls.wear!
+end
+
+if ENV['COVERAGE']
+  require "simplecov"
+
+  SimpleCov.start
+end
+
 require "bundler/setup"
 require "koine/attributes"
 
