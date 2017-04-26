@@ -105,18 +105,19 @@ module Koine
         @builder = nil
       end
 
-      def attribute(name, adapter, &block)
+      def attribute(name, adapter, lambda_constructor = nil, &block)
         unless @builder
           raise Error, 'You must call .attribute inside the .attributes block'
         end
 
-        adapter = coerce_adapter(adapter, &block)
+        adapter = coerce_adapter(adapter, lambda_constructor, &block)
         @builder.build(name, adapter)
       end
 
-      private def coerce_adapter(adapter, &block)
+      private def coerce_adapter(adapter, lambda_constructor, &block)
         return adapter unless adapter.instance_of?(::Symbol)
         adapter = const_get("Koine::Attributes::Adapter::#{adapter.to_s.capitalize}").new
+        lambda_constructor.call(adapter) if lambda_constructor
         yield(adapter) if block
         adapter
       end

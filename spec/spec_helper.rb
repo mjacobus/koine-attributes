@@ -79,8 +79,12 @@ class ExampleWithDate
   attributes initializer: true do
     attribute :date_with_object, Koine::Attributes::Adapter::Date.new.with_default_value('default_date')
     attribute :date_with_symbol, :date
-    attribute :date_with_symbol_and_custom_constructor, :date do |adapter|
+    attribute :date_with_block_constructor, :date do |adapter|
       adapter.with_default_value { Date.today }
     end
+
+    attribute :date_with_lambda_constructor, :date, ->(adapter) {
+      adapter.with_default_value { Date.today }
+    }
   end
 end

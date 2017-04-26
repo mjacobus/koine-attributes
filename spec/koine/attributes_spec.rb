@@ -109,10 +109,19 @@ RSpec.describe Koine::Attributes do
       expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
     end
 
-    it 'accepts adapter as symbol with block' do
-      default = ExampleWithDate.new.date_with_symbol_and_custom_constructor
-      coerced = ExampleWithDate.new(date_with_symbol_and_custom_constructor: '2001-01-02')
-        .date_with_symbol_and_custom_constructor
+    it 'accepts adapter as symbol with block constructor' do
+      default = ExampleWithDate.new.date_with_block_constructor
+      coerced = ExampleWithDate.new(date_with_block_constructor: '2001-01-02')
+                               .date_with_block_constructor
+
+      expect(default).to eq(Date.today)
+      expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
+    end
+
+    it 'accepts adapter as symbol with lambda constructor' do
+      default = ExampleWithDate.new.date_with_lambda_constructor
+      coerced = ExampleWithDate.new(date_with_lambda_constructor: '2001-01-02')
+                               .date_with_lambda_constructor
 
       expect(default).to eq(Date.today)
       expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
