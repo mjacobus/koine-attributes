@@ -3,10 +3,10 @@ require 'spec_helper'
 RSpec.describe Koine::Attributes do
   let(:driver) do
     Class.new do
-      attr_reader :default, :append
+      attr_reader :default_value, :append
 
-      def initialize(default: 'default value', append: 'coerced')
-        @default = default
+      def initialize(default_value: 'default value', append: 'coerced')
+        @default_value = default_value
         @append = append
       end
 
@@ -19,7 +19,7 @@ RSpec.describe Koine::Attributes do
 
   let(:klass) do
     name_driver = driver.new
-    last_name_driver = driver.new(default: 'default last name', append: 'last')
+    last_name_driver = driver.new(default_value: 'default last name', append: 'last')
 
     Class.new do
       include Koine::Attributes
@@ -33,7 +33,7 @@ RSpec.describe Koine::Attributes do
 
   let(:klass_with_constructor) do
     name_driver = driver.new
-    last_name_driver = driver.new(default: 'default last name', append: 'last')
+    last_name_driver = driver.new(default_value: 'default last name', append: 'last')
 
     Class.new do
       include Koine::Attributes
@@ -47,7 +47,7 @@ RSpec.describe Koine::Attributes do
 
   let(:klass_with_strict_constructor) do
     name_driver = driver.new
-    last_name_driver = driver.new(default: 'default last name', append: 'last')
+    last_name_driver = driver.new(default_value: 'default last name', append: 'last')
 
     Class.new do
       include Koine::Attributes

@@ -20,7 +20,7 @@ module Koine
       def build_getter(name, driver)
         target.class_eval do
           define_method(name) do
-            instance_variable_get("@#{name}") || driver.default
+            instance_variable_get("@#{name}") || driver.default_value
           end
         end
       end

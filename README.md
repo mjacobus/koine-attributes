@@ -50,10 +50,10 @@ Options:
 
  ```ruby
  attributes do
-   attribute :name, Koine::Attributes::Adapters::Date.new.with_default('guest')
+   attribute :name, Koine::Attributes::Adapters::Date.new.with_default_value('guest')
 
    # or
-   attribute :name, :string, ->(adapter) { adapter.with_default('guest') }
+   attribute :name, :string, ->(adapter) { adapter.with_default_value('guest') }
  end
 ```
 
@@ -93,8 +93,8 @@ class Product
 
   attributes do
     attribute :price, MyCustom::Money.new
-    attribute :available, :boolean, ->(attribues){ attributes.with_default(true) }
-    attribute :available, Koine::Attributes::Drivers::Boolean.new.with_default(true)
+    attribute :available, :boolean, ->(attribues){ attributes.with_default_value(true) }
+    attribute :available, Koine::Attributes::Drivers::Boolean.new.with_default_value(true)
   end
 end
 
@@ -112,8 +112,8 @@ product.price = "100 USD"
 
 ```ruby
 class MyCustom::Money
-  def default
-    return 'some default'
+  def default_value
+    return 'some default_value'
   end
 
   def coerce(*values)
