@@ -1,5 +1,6 @@
 require 'koine/attributes/version'
 require 'koine/attributes/builder'
+require 'koine/attributes/adapter/base'
 
 # provides the following API
 #
@@ -78,6 +79,10 @@ require 'koine/attributes/builder'
 #
 module Koine
   module Attributes
+    module Adapter
+      autoload :Date, 'koine/attributes/adapter/date'
+    end
+
     Error = Class.new(StandardError)
 
     def self.included(base)
@@ -100,11 +105,20 @@ module Koine
         @builder = nil
       end
 
-      def attribute(name, driver)
+      def attribute(name, adapter, &block)
         unless @builder
           raise Error, 'You must call .attribute inside the .attributes block'
         end
-        @builder.build(name, driver)
+
+        adapter = coerce_adapter(adapter, &block)
+        @builder.build(name, adapter)
+      end
+
+      private def coerce_adapter(adapter, &block)
+        return adapter unless adapter.instance_of?(::Symbol)
+        adapter = const_get("Koine::Attributes::Adapter::#{adapter.to_s.capitalize}").new
+        yield(adapter) if block
+        adapter
       end
     end
   end

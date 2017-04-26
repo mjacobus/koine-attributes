@@ -11,6 +11,7 @@ end
 
 require 'bundler/setup'
 require 'koine/attributes'
+require 'date'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -69,5 +70,17 @@ class ExampleClassWithStrictConstructor
   attributes initializer: true do
     attribute :name, DumbAdapter.new
     attribute :last_name, CustomDumbAdapter.new(append: 'last')
+  end
+end
+
+class ExampleWithDate
+  include Koine::Attributes
+
+  attributes initializer: true do
+    attribute :date_with_object, Koine::Attributes::Adapter::Date.new.with_default_value('default_date')
+    attribute :date_with_symbol, :date
+    attribute :date_with_symbol_and_custom_constructor, :date do |adapter|
+      adapter.with_default_value { Date.today }
+    end
   end
 end

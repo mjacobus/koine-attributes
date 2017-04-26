@@ -92,9 +92,30 @@ RSpec.describe Koine::Attributes do
       expect do
         Class.new do
           include Koine::Attributes
-          attribute :name, :driver
+          attribute :name, :adapter
         end
       end.to raise_error(Koine::Attributes::Error, 'You must call .attribute inside the .attributes block')
+    end
+  end
+
+  describe '.attribute with :symbol definition' do
+    subject { ExampleWithDate.new }
+
+    it 'accepts adapter object' do
+      default = ExampleWithDate.new.date_with_symbol
+      coerced = ExampleWithDate.new(date_with_symbol: '2001-01-02').date_with_symbol
+
+      expect(default).to eq(nil)
+      expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
+    end
+
+    it 'accepts adapter as symbol with block' do
+      default = ExampleWithDate.new.date_with_symbol_and_custom_constructor
+      coerced = ExampleWithDate.new(date_with_symbol_and_custom_constructor: '2001-01-02')
+        .date_with_symbol_and_custom_constructor
+
+      expect(default).to eq(Date.today)
+      expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
     end
   end
 end
