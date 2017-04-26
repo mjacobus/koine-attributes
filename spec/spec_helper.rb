@@ -1,22 +1,73 @@
 if ENV['COVERALLS']
-  require "coveralls"
+  require 'coveralls'
   Coveralls.wear!
 end
 
 if ENV['COVERAGE']
-  require "simplecov"
+  require 'simplecov'
 
   SimpleCov.start
 end
 
-require "bundler/setup"
-require "koine/attributes"
+require 'bundler/setup'
+require 'koine/attributes'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
+  config.example_status_persistence_file_path = '.rspec_status'
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+end
+
+class CustomDumbAdapter
+  attr_reader :default_value, :append
+
+  def initialize(default_value: 'default value', append: 'coerced')
+    @default_value = default_value
+    @append = append
+  end
+
+  def coerce(*values)
+    value = values.first
+    "#{value}-#{append}"
+  end
+end
+
+class DumbAdapter < CustomDumbAdapter
+  def initialize
+    super(default_value: 'default-value', append: 'coerced')
+  end
+end
+
+class ExampleClass
+  include Koine::Attributes
+
+  attributes do
+    attribute :name, CustomDumbAdapter.new
+    attribute :last_name, CustomDumbAdapter.new(
+      default_value: 'default last name',
+      append: 'last'
+    )
+  end
+end
+
+class ExampleClassWithConstructor
+  include Koine::Attributes
+
+  attributes initializer: { strict: false } do
+    attribute :name, DumbAdapter.new
+    attribute :last_name, DumbAdapter.new
+    attribute :last_name, CustomDumbAdapter.new(append: 'last')
+  end
+end
+
+class ExampleClassWithStrictConstructor
+  include Koine::Attributes
+
+  attributes initializer: true do
+    attribute :name, DumbAdapter.new
+    attribute :last_name, CustomDumbAdapter.new(append: 'last')
   end
 end

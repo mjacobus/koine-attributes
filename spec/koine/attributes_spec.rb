@@ -1,86 +1,28 @@
 require 'spec_helper'
 
 RSpec.describe Koine::Attributes do
-  let(:driver) do
-    Class.new do
-      attr_reader :default_value, :append
-
-      def initialize(default_value: 'default value', append: 'coerced')
-        @default_value = default_value
-        @append = append
-      end
-
-      def coerce(*values)
-        value = values.first
-        "#{value}-#{append}"
-      end
-    end
-  end
-
-  let(:klass) do
-    name_driver = driver.new
-    last_name_driver = driver.new(default_value: 'default last name', append: 'last')
-
-    Class.new do
-      include Koine::Attributes
-
-      attributes do
-        attribute :name, name_driver
-        attribute :last_name, last_name_driver
-      end
-    end
-  end
-
-  let(:klass_with_constructor) do
-    name_driver = driver.new
-    last_name_driver = driver.new(default_value: 'default last name', append: 'last')
-
-    Class.new do
-      include Koine::Attributes
-
-      attributes initializer: { strict: false } do
-        attribute :name, name_driver
-        attribute :last_name, last_name_driver
-      end
-    end
-  end
-
-  let(:klass_with_strict_constructor) do
-    name_driver = driver.new
-    last_name_driver = driver.new(default_value: 'default last name', append: 'last')
-
-    Class.new do
-      include Koine::Attributes
-
-      attributes initializer: true do
-        attribute :name, name_driver
-        attribute :last_name, last_name_driver
-      end
-    end
-  end
-
   describe '.attributes -> { attribute :attribute_name, :driver }' do
     describe 'with no arguments' do
       it 'creates a getter' do
-        expect(klass.new).to respond_to(:name)
-        expect(klass.new).to respond_to(:last_name)
+        expect(ExampleClass.new).to respond_to(:name)
+        expect(ExampleClass.new).to respond_to(:last_name)
       end
 
       it 'creates a setter' do
-        expect(klass.new).to respond_to(:name=)
-        expect(klass.new).to respond_to(:last_name=)
+        expect(ExampleClass.new).to respond_to(:name=)
+        expect(ExampleClass.new).to respond_to(:last_name=)
       end
 
       it 'does not create a constructor' do
         expect do
-          klass.new(name: 'foo')
+          ExampleClass.new(name: 'foo')
         end.to raise_error(ArgumentError, /wrong number of arguments/)
       end
     end
   end
 
   describe 'getters created by the module' do
-    subject { klass.new }
+    subject { ExampleClass.new }
 
     it 'returns default when no value was given' do
       expect(subject.name).to eq('default value')
@@ -98,7 +40,7 @@ RSpec.describe Koine::Attributes do
 
   describe '.attributes initializer: option' do
     it 'creates a constructor that delegates to protected #initialize_attributes' do
-      subject = klass_with_constructor.new
+      subject = ExampleClassWithConstructor.new
 
       expect(subject).not_to respond_to(:initialize_attributes)
       expect(subject.respond_to?(:initialize_attributes, true)).to be(true)
@@ -108,7 +50,7 @@ RSpec.describe Koine::Attributes do
       it 'assigns attributes from the constructor but does not raise error for invalid attributes' do
         attributes = { name: 'john', 'last_name' => 'doe', foo: 'bar' }
 
-        subject = klass_with_constructor.new(attributes)
+        subject = ExampleClassWithConstructor.new(attributes)
 
         expect(subject.name).to eq('john-coerced')
         expect(subject.last_name).to eq('doe-last')
@@ -117,11 +59,11 @@ RSpec.describe Koine::Attributes do
 
     describe 'with initializer: true' do
       it 'can be initialized with no arguments' do
-        klass_with_strict_constructor.new
+        ExampleClassWithStrictConstructor.new
       end
 
       it 'assigns valid attributes from the constructor' do
-        subject = klass_with_strict_constructor.new(
+        subject = ExampleClassWithStrictConstructor.new(
           name: 'john',
           'last_name' => 'doe'
         )
@@ -139,7 +81,7 @@ RSpec.describe Koine::Attributes do
         }
 
         expect do
-          klass_with_strict_constructor.new(invalid_attributes)
+          ExampleClassWithStrictConstructor.new(invalid_attributes)
         end.to raise_error(ArgumentError, 'Invalid attributes (age, likes_footbol)')
       end
     end
@@ -150,7 +92,6 @@ RSpec.describe Koine::Attributes do
       expect do
         Class.new do
           include Koine::Attributes
-
           attribute :name, :driver
         end
       end.to raise_error(Koine::Attributes::Error, 'You must call .attribute inside the .attributes block')
