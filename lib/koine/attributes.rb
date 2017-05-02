@@ -80,6 +80,7 @@ require 'koine/attributes/adapter/base'
 module Koine
   module Attributes
     module Adapter
+      autoload :Boolean, 'koine/attributes/adapter/boolean'
       autoload :Date, 'koine/attributes/adapter/date'
       autoload :String, 'koine/attributes/adapter/string'
     end
