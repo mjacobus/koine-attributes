@@ -3,7 +3,7 @@ module Koine
     module Adapter
       class String < Base
         def coerce(value)
-          ensure_frozen do
+          secure do
             String(value)
           end
         end

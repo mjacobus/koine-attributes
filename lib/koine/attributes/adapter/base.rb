@@ -20,8 +20,11 @@ module Koine
 
         protected
 
-        def ensure_frozen
-          yield.freeze
+        # duplicates if possible and freezes object
+        def secure
+          value = yield
+          value = value.dup if value.respond_to?(:dup)
+          value.freeze
         end
       end
     end
