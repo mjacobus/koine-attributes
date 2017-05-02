@@ -22,12 +22,7 @@ RSpec.describe Koine::Attributes::Adapter::Date do
         coerced = subject.coerce(value)
 
         expect(coerced).to eq(date)
-      end
-
-      it "freezes #{date}" do
-        coerced = subject.coerce(value)
-
-        expect(coerced.frozen?).to eq(true)
+        expect(coerced).to be_frozen
       end
     end
 

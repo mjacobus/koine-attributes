@@ -20,12 +20,7 @@ RSpec.describe Koine::Attributes::Adapter::Time do
         coerced = subject.coerce(value)
 
         expect(coerced).to eq(expected)
-      end
-
-      it "freezes #{expected}" do
-        coerced = subject.coerce(value)
-
-        expect(coerced.frozen?).to eq(true)
+        expect(coerced).to be_frozen
       end
     end
 
