@@ -3,8 +3,11 @@ module Koine
     module Adapter
       class Date < Base
         def coerce(date)
-          return date if date.instance_of?(::Date)
-          ::Date.parse(date)
+          ensure_frozen do
+            next date.dup if date.is_a?(::Date)
+            next date.to_date if date.is_a?(::Time)
+            ::Date.parse(date)
+          end
         end
       end
     end

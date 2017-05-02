@@ -17,6 +17,12 @@ module Koine
           @default_value = block if block
           self
         end
+
+        protected
+
+        def ensure_frozen
+          yield.freeze
+        end
       end
     end
   end
