@@ -28,7 +28,7 @@ Or install it yourself as:
 ## Usage
 
  ```ruby
- class person
+ class Person
    attributes do
      attribute :name, :string
      attribute :birthday, :date
