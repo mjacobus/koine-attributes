@@ -17,28 +17,19 @@ RSpec.describe Koine::Attributes::Adapter::Boolean do
   end
 
   describe '#coerce' do
-    context 'with valid values' do
-      COERSIONS.each do |raw, expected|
-        it "coerces #{raw} into '#{expected}'" do
-          coerced = subject.coerce(raw)
+    COERSIONS.each do |raw, expected|
+      it "coerces #{raw} into '#{expected}'" do
+        coerced = subject.coerce(raw)
 
-          expect(coerced).to eq(expected)
-        end
-
-        it "freezes '#{expected}'" do
-          coerced = subject.coerce(expected)
-
-          expect(coerced).to be_frozen
-        end
+        expect(coerced).to eq(expected)
+        expect(coerced).to be_frozen
       end
     end
 
-    context 'with unknown values' do
-      it 'raises argument error' do
-        value = 'yes'
+    it 'raises ArgumentError with yes' do
+      value = 'yes'
 
-        expect { subject.coerce(value) }.to raise_error(ArgumentError)
-      end
+      expect { subject.coerce(value) }.to raise_error(ArgumentError)
     end
   end
 
