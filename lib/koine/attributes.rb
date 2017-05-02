@@ -82,6 +82,7 @@ module Koine
     module Adapter
       autoload :Boolean, 'koine/attributes/adapter/boolean'
       autoload :Date, 'koine/attributes/adapter/date'
+      autoload :Time, 'koine/attributes/adapter/time'
       autoload :Float, 'koine/attributes/adapter/float'
       autoload :Integer, 'koine/attributes/adapter/integer'
       autoload :String, 'koine/attributes/adapter/string'
