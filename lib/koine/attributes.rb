@@ -81,6 +81,7 @@ module Koine
   module Attributes
     module Adapter
       autoload :Date, 'koine/attributes/adapter/date'
+      autoload :String, 'koine/attributes/adapter/string'
     end
 
     Error = Class.new(StandardError)
