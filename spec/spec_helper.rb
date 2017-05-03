@@ -123,3 +123,12 @@ class ExampleWithDate
     }
   end
 end
+
+class Location
+  include Koine::Attributes
+
+  attributes initializer: { freeze: true } do
+    attribute :lat, :float
+    attribute :lon, :float
+  end
+end

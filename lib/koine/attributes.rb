@@ -6,6 +6,8 @@ require 'koine/attributes/adapter/base'
 #
 # @example using attributes
 #   class Person
+#     include Koine::Attributes
+#
 #     attributes do
 #       attribute :name, :string
 #       attribute :birthday, :date
@@ -34,6 +36,8 @@ require 'koine/attributes/adapter/base'
 # @example Constructor for attributes
 #
 #   class Person
+#     include Koine::Attributes
+#
 #     attributes initializer: true do
 #       attribute :name, :string
 #       attribute :birthday, :date
@@ -48,6 +52,8 @@ require 'koine/attributes/adapter/base'
 # @example Constructor for attributes withouth strict mode
 #
 #   class Person
+#     include Koine::Attributes
+#
 #     attributes initializer: { strict: false } do
 #       attribute :name, :string
 #       attribute :birthday, :date
@@ -60,6 +66,8 @@ require 'koine/attributes/adapter/base'
 # @example Override constructor
 #
 #   class Person
+#     include Koine::Attributes
+#
 #     attr_reader :foo
 #
 #     attributes initializer: true do
@@ -76,6 +84,19 @@ require 'koine/attributes/adapter/base'
 #
 #   person = Person.new(name: 'John Doe', birthday: '2001-01-31', foo: :bar)
 #   person.foo # => :bar
+#
+# @example
+#  class Location
+#    include Koine::Attributes
+#
+#    attributes initializer: { freeze: true } do
+#      attribute :lat, :float
+#      attribute :lon, :float
+#    end
+#  end
+#
+#  location = Location.new(lat: 1, lon: 2)
+#  new_location = location.with_lon(3)
 #
 module Koine
   module Attributes
