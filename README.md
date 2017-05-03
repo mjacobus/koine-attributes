@@ -2,6 +2,8 @@
 
 Strong attributes for ruby ruby objects.
 
+Yes, there are [so many alternative solutions already](#alternative-solutions)! Why then? Cause some times people need distractions at the airports.
+
 [![Build Status](https://travis-ci.org/mjacobus/koine-attributes.svg?branch=master)](https://travis-ci.org/mjacobus/koine-attributes)
 [![Coverage Status](https://coveralls.io/repos/github/mjacobus/koine-attributes/badge.svg?branch=master)](https://coveralls.io/github/mjacobus/koine-attributes?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mjacobus/koine-attributes/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mjacobus/koine-attributes/?branch=master)
@@ -143,6 +145,12 @@ product.price = "100 USD"
 :string
 :time
 ```
+
+### Alternative solutions
+
+- [attributed_object](https://github.com/jgroeneveld/attributed_object)
+- [virtus](https://github.com/solnic/virtus)
+- [dry-struct](https://github.com/dry-rb/dry-struct)
 
 ## Development
 
