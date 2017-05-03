@@ -14,9 +14,11 @@ module Koine
         end
 
         def coerce(value)
-          return true if true_values.include?(value)
-          return false if false_values.include?(value)
-          raise ArgumentError, "Invalid argument '#{value}'"
+          secure do
+            next true if true_values.include?(value)
+            next false if false_values.include?(value)
+            raise ArgumentError, "Invalid argument '#{value}'"
+          end
         end
 
         def append_true_value(value)

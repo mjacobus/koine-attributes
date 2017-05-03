@@ -29,7 +29,7 @@ RSpec.describe Koine::Attributes::Adapter::Float do
     end
 
     COERCIONS.each do |raw_value, expected|
-      it "coerces #{raw_value} coerce to #{expected}" do
+      it "coerces #{raw_value} into #{expected} (#{expected.class})" do
         result = subject.coerce(raw_value)
 
         expect(result).to be(expected)

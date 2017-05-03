@@ -18,7 +18,7 @@ RSpec.describe Koine::Attributes::Adapter::Boolean do
 
   describe '#coerce' do
     COERSIONS.each do |raw, expected|
-      it "coerces #{raw} into '#{expected}'" do
+      it "coerces #{raw} into #{expected} (#{expected.class})" do
         coerced = subject.coerce(raw)
 
         expect(coerced).to eq(expected)
