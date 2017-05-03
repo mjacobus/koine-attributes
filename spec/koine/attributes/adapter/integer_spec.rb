@@ -1,47 +1,26 @@
 require 'spec_helper'
 
 RSpec.describe Koine::Attributes::Adapter::Integer do
-  INVALID_ARGUMENTS = [
-    '1foo',
-    '1.1',
-    '-1.1'
-  ].freeze
+  it_behaves_like_an_adapter
 
-  COERCIONS = {
-    '1'       => 1,
-    1.0       => 1,
-    1.1       => 1,
-    1.999999  => 1,
-    '-1'      => -1,
-    -1.0      => -1,
-    -1.1      => -1,
-    -1.999999 => -1
-  }.freeze
+  it_wont_coerce '1foo'
+  it_wont_coerce '1.1'
+  it_wont_coerce '-1.1'
 
-  it 'extends Base' do
-    expect(subject).to be_a(Koine::Attributes::Adapter::Base)
-  end
+  it_coerces '1', to: 1, skip_dup: true
+  it_coerces 1.0, to: 1, skip_dup: true
+  it_coerces 1.1, to: 1, skip_dup: true
+  it_coerces 1.999999, to: 1, skip_dup: true
+  it_coerces '-1', to: -1, skip_dup: true
+  it_coerces -1.0, to: -1, skip_dup: true
+  it_coerces -1.1, to: -1, skip_dup: true
+  it_coerces -1.999999, to: -1, skip_dup: true
 
   describe '#coerce' do
     specify 'returns :to_int when object implements it' do
       value = double(to_int: 10)
 
       expect(subject.coerce(value)).to eq(10)
-    end
-
-    COERCIONS.each do |raw_value, expected|
-      it "coerces #{raw_value} coerce to #{expected}" do
-        result = subject.coerce(raw_value)
-
-        expect(result).to be(expected)
-        expect(result).to be_frozen
-      end
-    end
-
-    INVALID_ARGUMENTS.each do |value|
-      it "raises InvalidArgument error with #{value}" do
-        expect { subject.coerce(value) }.to raise_error(ArgumentError)
-      end
     end
   end
 end

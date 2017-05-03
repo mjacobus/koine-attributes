@@ -5,17 +5,15 @@ RSpec.describe Koine::Attributes::Adapter::Float do
     '1foo'
   ].freeze
 
-  COERCIONS = {
-    '1'    => 1.0,
-    1.0    => 1.0,
-    1.1    => 1.1,
-    1.99   => 1.99,
-    '-1'   => -1.0,
-    '-1.1' => -1.1,
-    -1.0   => -1.0,
-    -1.1   => -1.1,
-    -1.9   => -1.9
-  }.freeze
+  it_coerces '1', to: 1.0, skip_dup: true
+  it_coerces 1.0, to: 1.0, skip_dup: true
+  it_coerces 1.1, to: 1.1, skip_dup: true
+  it_coerces 1.99, to: 1.99, skip_dup: true
+  it_coerces '-1', to: -1.0, skip_dup: true
+  it_coerces '-1.1', to: -1.1, skip_dup: true
+  it_coerces -1.0, to: -1.0, skip_dup: true
+  it_coerces -1.1, to: -1.1, skip_dup: true
+  it_coerces -1.9, to: -1.9, skip_dup: true
 
   it 'extends Base' do
     expect(subject).to be_a(Koine::Attributes::Adapter::Base)
@@ -26,15 +24,6 @@ RSpec.describe Koine::Attributes::Adapter::Float do
       value = double(to_f: 10.1)
 
       expect(subject.coerce(value)).to eq(10.1)
-    end
-
-    COERCIONS.each do |raw_value, expected|
-      it "coerces #{raw_value} into #{expected} (#{expected.class})" do
-        result = subject.coerce(raw_value)
-
-        expect(result).to be(expected)
-        expect(result).to be_frozen
-      end
     end
 
     INVALID_ARGUMENTS.each do |value|

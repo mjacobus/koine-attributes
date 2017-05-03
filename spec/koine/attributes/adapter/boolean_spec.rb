@@ -1,37 +1,18 @@
 require 'spec_helper'
 
 RSpec.describe Koine::Attributes::Adapter::Boolean do
-  COERSIONS = {
-    true    => true,
-    1       => true,
-    '1'     => true,
-    'true'  => true,
-    'false' => false,
-    '0'     => false,
-    0       => false,
-    false   => false
-  }.freeze
+  it_behaves_like_an_adapter
 
-  it 'extends Base' do
-    expect(subject).to be_a(Koine::Attributes::Adapter::Base)
-  end
+  it_coerces true, to: true, skip_frozen: true, skip_dup: true
+  it_coerces 1, to: true, skip_frozen: true, skip_dup: true
+  it_coerces '1', to: true, skip_frozen: true, skip_dup: true
+  it_coerces 'true', to: true, skip_frozen: true, skip_dup: true
+  it_coerces 'false', to: false, skip_frozen: true, skip_dup: true
+  it_coerces '0', to: false, skip_frozen: true, skip_dup: true
+  it_coerces 0, to: false, skip_frozen: true, skip_dup: true
+  it_coerces false, to: false, skip_frozen: true, skip_dup: true
 
-  describe '#coerce' do
-    COERSIONS.each do |raw, expected|
-      it "coerces #{raw} into #{expected} (#{expected.class})" do
-        coerced = subject.coerce(raw)
-
-        expect(coerced).to eq(expected)
-        expect(coerced).to be_frozen
-      end
-    end
-
-    it 'raises ArgumentError with yes' do
-      value = 'yes'
-
-      expect { subject.coerce(value) }.to raise_error(ArgumentError)
-    end
-  end
+  it_wont_coerce 'yes'
 
   describe '#append_true_value' do
     it 'appends a truthy value' do
