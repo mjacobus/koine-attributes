@@ -117,7 +117,7 @@ module Koine
 
     module ClassMethods
       def attributes(options = {}, &block)
-        @builder = Builder.new(target: self)
+        @builder = Builder::ClassBuilder.new(target: self)
         class_eval(&block)
 
         if options[:initializer]
