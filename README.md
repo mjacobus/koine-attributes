@@ -33,6 +33,8 @@ Or install it yourself as:
 
  ```ruby
  class Person
+   include Koine::Attributes
+
    attributes do
      attribute :name, :string
      attribute :birthday, :date
@@ -65,6 +67,8 @@ Options:
 
  ```ruby
  class Person
+   include Koine::Attributes
+
    attributes initializer: true do
      attribute :name, :string
      attribute :birthday, :date
@@ -81,6 +85,8 @@ Options:
 
  ```ruby
  class Person
+   include Koine::Attributes
+
    attributes initializer: { strict: false } do
      attribute :name, :string
      attribute :birthday, :date
@@ -135,6 +141,22 @@ product.price = { currency: 'USD', value: 100 }
 
 # or
 product.price = "100 USD"
+```
+
+### Value objects
+
+```ruby
+class Location
+  include Koine::Attributes
+
+  attributes initializer: { freeze: true } do
+    attribute :lat, :float
+    attribute :lon, :float
+  end
+end
+
+location = Location.new(lat: 1, lon: 2)
+new_location = location.with_lon(3)
 ```
 
 ### Standard types

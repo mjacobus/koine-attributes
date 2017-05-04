@@ -58,6 +58,12 @@ RSpec.describe Koine::Attributes do
     end
 
     describe 'with initializer: true' do
+      it 'does not freeze object' do
+        subject = ExampleClassWithStrictConstructor.new
+
+        expect(subject).not_to be_frozen
+      end
+
       it 'can be initialized with no arguments' do
         ExampleClassWithStrictConstructor.new
       end
@@ -125,6 +131,43 @@ RSpec.describe Koine::Attributes do
 
       expect(default).to eq(Date.today)
       expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
+    end
+  end
+
+  describe 'value object (with constructor: { freeze: true })' do
+    subject { Location.new(lat: 1, lon: 2) }
+
+    it 'freezes object' do
+      expect(subject).to be_frozen
+    end
+
+    it 'does not have setter' do
+      expect(subject).not_to respond_to(:lat=)
+      expect(subject).not_to respond_to(:lon=)
+    end
+
+    it 'has getter' do
+      expect(subject.lat).to eq(1)
+      expect(subject.lon).to eq(2)
+    end
+
+    it 'creates a new object with the "with_{attribute}" method' do
+      new_location = subject.with_lat(3)
+
+      expect(new_location.lat).to eq(3)
+      expect(new_location.lon).to eq(2)
+      expect(new_location.with_lon(10).lon).to eq(10)
+
+      expect(new_location).not_to be(subject)
+      expect(new_location).to be_frozen
+      expect(subject).to be_frozen
+    end
+
+    it 'can be compared with other objects' do
+      new_location = Location.new(lat: 1, lon: 2)
+
+      expect(new_location).to eq(subject)
+      expect(new_location.with_lat(2)).not_to eq(subject)
     end
   end
 end

@@ -35,7 +35,7 @@ module Koine
         end
       end
 
-      def build_constructor(strict: true)
+      def build_constructor(strict: true, freeze: false)
         valid_attributes = attributes
 
         target.class_eval do
@@ -49,10 +49,10 @@ module Koine
             invalid_attributes = []
             constructor_args = HashHelper.new.symbolize_keys(constructor_args)
 
-            constructor_args.each do |name, _value|
+            constructor_args.each do |name, value|
               if valid_attributes.include?(name)
                 setter = "#{name}=".to_sym
-                send(setter, constructor_args[name])
+                send(setter, value)
                 next
               end
 
@@ -64,6 +64,55 @@ module Koine
               attributes = invalid_attributes.join(', ')
               raise ArgumentError, "Invalid attributes (#{attributes})"
             end
+
+            self.freeze if freeze
+          end
+        end
+
+        if strict
+          make_setters_private
+          create_with_methods
+          create_comparator
+        end
+      end
+
+      protected
+
+      def make_setters_private
+        attrs = attributes
+
+        target.instance_eval do
+          attrs.each do |attr|
+            private "#{attr}="
+          end
+        end
+      end
+
+      def create_with_methods
+        attributes.each do |attr|
+          create_with_method(attr)
+        end
+      end
+
+      def create_with_method(attr)
+        target.class_eval do
+          define_method "with_#{attr}" do |*args|
+            dup.tap do |new_object|
+              new_object.send("#{attr}=", *args)
+              new_object.freeze
+            end
+          end
+        end
+      end
+
+      def create_comparator
+        attrs = attributes
+
+        target.class_eval do
+          define_method :== do |that|
+            a = attrs.map { |attr| send(attr) }
+            b = attrs.map { |attr| that.send(attr) }
+            a == b
           end
         end
       end
