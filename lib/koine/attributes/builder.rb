@@ -83,7 +83,7 @@ module Koine
 
         target.instance_eval do
           attrs.each do |attr|
-            protected "#{attr}="
+            private "#{attr}="
           end
         end
       end
