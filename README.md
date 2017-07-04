@@ -10,7 +10,7 @@ Yes, there are [so many alternative solutions already](#alternative-solutions)! 
 [![Code Climate](https://codeclimate.com/github/mjacobus/koine-attributes/badges/gpa.svg)](https://codeclimate.com/github/mjacobus/koine-attributes)
 [![Issue Count](https://codeclimate.com/github/mjacobus/koine-attributes/badges/issue_count.svg)](https://codeclimate.com/github/mjacobus/koine-attributes)
 
-[![Gem Version](https://badge.fury.io/rb/koine-attributes.svg)](https://badge.fury.io/rb/koine-command_bus)
+[![Gem Version](https://badge.fury.io/rb/koine-attributes.svg)](https://badge.fury.io/rb/koine-attributes)
 [![Dependency Status](https://gemnasium.com/badges/github.com/mjacobus/koine-attributes.svg)](https://gemnasium.com/github.com/mjacobus/koine-attributes)
 
 ## Installation
