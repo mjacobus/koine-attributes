@@ -1,3 +1,5 @@
+require 'time'
+
 module Koine
   module Attributes
     module Adapter
