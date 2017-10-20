@@ -26,10 +26,10 @@ RSpec.describe Koine::Attributes do
       it 'returns a hash Attributes with the atrributes' do
         subject = Location.new(lat: 123, lon: 789)
 
-        expect(subject.attributes.to_h).to eq({
+        expect(subject.attributes.to_h).to eq(
           lat: 123,
           lon: 789
-        })
+        )
       end
     end
 
@@ -39,10 +39,10 @@ RSpec.describe Koine::Attributes do
         subject.name = 'foo'
         subject.last_name = 'bar'
 
-        expect(subject.attributes.to_h).to eq({
+        expect(subject.attributes.to_h).to eq(
           name: 'foo',
           last_name: 'bar'
-        })
+        )
       end
     end
   end
@@ -158,7 +158,6 @@ RSpec.describe Koine::Attributes do
       expect(default).to eq(Date.today)
       expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
     end
-
   end
 
   describe 'value object (with constructor: { freeze: true })' do

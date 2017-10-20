@@ -19,7 +19,6 @@ module SpecHelper
   end
 
   module ClassMethods
-
     def it_behaves_like_an_adapter
       it 'extends Base' do
         expect(subject).to be_a(Koine::Attributes::Adapter::Base)
