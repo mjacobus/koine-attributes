@@ -1,5 +1,5 @@
+require 'forwardable'
 require 'koine/attributes/version'
-require 'koine/attributes/builder'
 require 'koine/attributes/adapter/base'
 
 # provides the following API
@@ -101,6 +101,7 @@ require 'koine/attributes/adapter/base'
 module Koine
   module Attributes
     autoload :Attributes, 'koine/attributes/attributes'
+    autoload :AttributesFactory, 'koine/attributes/attributes_factory'
 
     module Adapter
       autoload :Boolean, 'koine/attributes/adapter/boolean'
@@ -114,42 +115,44 @@ module Koine
     Error = Class.new(StandardError)
 
     def self.included(base)
+      base.extend(Forwardable)
       base.extend(ClassMethods)
     end
 
     module ClassMethods
       def attributes(options = {}, &block)
-        @builder = Builder::ClassBuilder.new(target: self)
+        @builder = true
+        @_attributes_factory ||= AttributesFactory.new(options)
         class_eval(&block)
 
-        if options[:initializer]
-          initializer_options = options[:initializer]
+        instance_eval do
+          define_method :attributes do
+            @_attributes ||= self.class.instance_variable_get(:@_attributes_factory).create(self)
+          end
 
-          initializer_options = {} unless initializer_options.is_a?(Hash)
-
-          @builder.build_constructor(initializer_options)
-        else
-          @builder.build_lazy_attributes
+          define_method(:initialize) { |*args| attributes.initialize_values(*args) }
         end
+
+        @_attributes_factory.freeze
 
         @builder = nil
       end
 
-      def attribute(name, adapter, lambda_constructor = nil, &block)
+      def attribute(name, adapter, lambda_arg = nil, &block)
         unless @builder
           raise Error, 'You must call .attribute inside the .attributes block'
         end
 
-        adapter = coerce_adapter(adapter, lambda_constructor, &block)
-        @builder.build(name, adapter)
-      end
+        block = lambda_arg || block
+        instance_variable_get(:@_attributes_factory).add_attribute(name, adapter, &block)
 
-      private def coerce_adapter(adapter, lambda_constructor, &block)
-        return adapter unless adapter.instance_of?(::Symbol)
-        adapter = const_get("Koine::Attributes::Adapter::#{adapter.to_s.capitalize}").new
-        lambda_constructor.call(adapter) if lambda_constructor
-        yield(adapter) if block
-        adapter
+        instance_eval do
+          def_delegators :attributes, name, "#{name}=", "with_#{name}"
+
+          define_method :== do |other|
+            attributes == other.attributes
+          end
+        end
       end
     end
   end

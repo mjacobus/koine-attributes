@@ -1,6 +1,26 @@
 require 'spec_helper'
 
 RSpec.describe Koine::Attributes do
+  it 'sets the attributes' do
+    person = PersonWithNoConstructor.new
+
+    person.attributes.name = 'first'
+    person.attributes.last_name = 'last'
+
+    expect(person.attributes.name).to eq 'first'
+    expect(person.attributes.last_name).to eq 'last'
+  end
+
+  it 'adds setters metters and so on' do
+    person = PersonWithNoConstructor.new
+
+    person.name = 'first'
+    person.last_name = 'last'
+
+    expect(person.name).to eq 'first'
+    expect(person.last_name).to eq 'last'
+  end
+
   describe '.attributes -> { attribute :attribute_name, :driver }' do
     describe 'with no arguments' do
       it 'creates a getter' do
@@ -65,13 +85,6 @@ RSpec.describe Koine::Attributes do
   end
 
   describe '.attributes initializer: option' do
-    it 'creates a constructor that delegates to protected #initialize_attributes' do
-      subject = ExampleClassWithConstructor.new
-
-      expect(subject).not_to respond_to(:initialize_attributes)
-      expect(subject.respond_to?(:initialize_attributes, true)).to be(true)
-    end
-
     context 'when { strict: false }' do
       it 'assigns attributes from the constructor but does not raise error for invalid attributes' do
         attributes = { name: 'john', 'last_name' => 'doe', foo: 'bar' }
@@ -147,7 +160,7 @@ RSpec.describe Koine::Attributes do
                                .date_with_block_constructor
 
       expect(default).to eq(Date.today)
-      expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
+      expect(coerced).to eq(Date.new(2001, 1, 2))
     end
 
     it 'accepts adapter as symbol with lambda constructor' do
@@ -156,7 +169,7 @@ RSpec.describe Koine::Attributes do
                                .date_with_lambda_constructor
 
       expect(default).to eq(Date.today)
-      expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
+      expect(coerced).to eq(Date.new(2001, 1, 2))
     end
   end
 
@@ -165,11 +178,15 @@ RSpec.describe Koine::Attributes do
 
     it 'freezes object' do
       expect(subject).to be_frozen
+      # expect(subject.attributes).to be_frozen
     end
 
-    it 'does not have setter' do
-      expect(subject).not_to respond_to(:lat=)
-      expect(subject).not_to respond_to(:lon=)
+    it 'cannot mutate object' do
+      expect do
+        subject.lat = 10
+      end.to raise_error(RuntimeError, /frozen/)
+
+      expect(subject.lat).not_to eq 10
     end
 
     it 'has getter' do
