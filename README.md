@@ -49,7 +49,12 @@ Or install it yourself as:
  person.birtday = '2001-02-31' # Date Object can also be given
 
  person.name # => 'John Doe'
- person.birtday # => #<Date 2001-02-31>
+ person.birthday # => #<Date 2001-02-31>
+
+ person.attributes.to_h   # => {
+                          #   name: 'John Doe',
+                          #   birthday: #<Date 2001-02-31>
+                          # }
  ```
 
 Options:

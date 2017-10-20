@@ -13,6 +13,7 @@ module Koine
           @getter = GetterBuilder.new(attributes: attributes, target: target)
           @setter = SetterBuilder.new(attributes: attributes, target: target)
           @constructor = ConstructorBuilder.new(attributes: attributes, target: target)
+          @lazy_attributes = LazyAttributesBuilder.new(attributes: attributes, target: target)
         end
 
         def build(name, driver)
@@ -23,6 +24,10 @@ module Koine
 
         def build_constructor(strict: true, freeze: false)
           @constructor.build(strict: strict, freeze: freeze)
+        end
+
+        def build_lazy_attributes
+          @lazy_attributes.build
         end
       end
 
@@ -57,13 +62,30 @@ module Koine
         end
       end
 
+      class LazyAttributesBuilder < BaseBuilder
+        def build
+          valid_attributes = attributes
+
+          target.class_eval do
+            define_method :attributes do
+              @_koine_attributes ||= Koine::Attributes::Attributes.new(self, attributes: valid_attributes)
+            end
+          end
+        end
+      end
+
       class ConstructorBuilder < BaseBuilder
         def build(strict: true, freeze: false)
           valid_attributes = attributes
 
           target.class_eval do
-            def initialize(args = {})
+            define_method :initialize do |args = {}|
+              @_koine_attributes ||= Koine::Attributes::Attributes.new(self, attributes: valid_attributes)
               initialize_attributes(args)
+            end
+
+            def attributes
+              @_koine_attributes
             end
 
             protected

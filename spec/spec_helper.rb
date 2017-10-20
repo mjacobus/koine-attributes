@@ -89,6 +89,15 @@ class ExampleClass
   end
 end
 
+class PersonWithNoConstructor
+  include Koine::Attributes
+
+  attributes initializer: false do
+    attribute :name, :string
+    attribute :last_name, :string
+  end
+end
+
 class ExampleClassWithConstructor
   include Koine::Attributes
 

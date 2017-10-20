@@ -100,6 +100,8 @@ require 'koine/attributes/adapter/base'
 #
 module Koine
   module Attributes
+    autoload :Attributes, 'koine/attributes/attributes'
+
     module Adapter
       autoload :Boolean, 'koine/attributes/adapter/boolean'
       autoload :Date, 'koine/attributes/adapter/date'
@@ -126,6 +128,8 @@ module Koine
           initializer_options = {} unless initializer_options.is_a?(Hash)
 
           @builder.build_constructor(initializer_options)
+        else
+          @builder.build_lazy_attributes
         end
 
         @builder = nil
