@@ -76,67 +76,9 @@ class DumbAdapter < CustomDumbAdapter
   end
 end
 
-class ExampleClass
-  include Koine::Attributes
-
-  attributes do
-    attribute :name, CustomDumbAdapter.new
-    attribute :last_name, CustomDumbAdapter.new(
-      default_value: 'default last name',
-      append: 'last'
-    )
-  end
-end
-
-class PersonWithNoConstructor
-  include Koine::Attributes
-
-  attributes initializer: false do
-    attribute :name, :string
-    attribute :last_name, :string
-  end
-end
-
-class ExampleClassWithConstructor
-  include Koine::Attributes
-
-  attributes initializer: { strict: false } do
-    attribute :name, DumbAdapter.new
-    attribute :last_name, DumbAdapter.new
-    attribute :last_name, CustomDumbAdapter.new(append: 'last')
-  end
-end
-
-class ExampleClassWithStrictConstructor
-  include Koine::Attributes
-
-  attributes initializer: true do
-    attribute :name, DumbAdapter.new
-    attribute :last_name, CustomDumbAdapter.new(append: 'last')
-  end
-end
-
-class ExampleWithDate
-  include Koine::Attributes
-
-  attributes initializer: true do
-    attribute :date_with_object, Koine::Attributes::Adapter::Date.new.with_default_value('default_date')
-    attribute :date_with_symbol, :date
-    attribute :date_with_block_constructor, :date do |adapter|
-      adapter.with_default_value { Date.today }
-    end
-
-    attribute :date_with_lambda_constructor, :date, ->(adapter) {
-      adapter.with_default_value { Date.today }
-    }
-  end
-end
-
-class Location
-  include Koine::Attributes
-
-  attributes initializer: { freeze: true } do
-    attribute :lat, :float
-    attribute :lon, :float
+def create_class(options = {}, &block)
+  Class.new do
+    include Koine::Attributes
+    attributes(options, &block)
   end
 end
