@@ -1,41 +1,67 @@
 require 'spec_helper'
 
 RSpec.describe Koine::Attributes do
-  it 'sets the attributes' do
-    person = PersonWithNoConstructor.new
-
-    person.attributes.name = 'first'
-    person.attributes.last_name = 'last'
-
-    expect(person.attributes.name).to eq 'first'
-    expect(person.attributes.last_name).to eq 'last'
+  let(:location_class) do
+    create_class initializer: { freeze: true, strict: true } do
+      attribute :lat, :float
+      attribute :lon, :float
+    end
   end
 
-  it 'adds setters metters and so on' do
-    person = PersonWithNoConstructor.new
+  describe 'class with no constructor' do
+    let(:klass) do
+      create_class(initializer: false) do
+        attribute :name, :string
+        attribute :last_name, :string
+      end
+    end
 
-    person.name = 'first'
-    person.last_name = 'last'
+    it 'sets the attributes' do
+      person = klass.new
 
-    expect(person.name).to eq 'first'
-    expect(person.last_name).to eq 'last'
+      person.attributes.name = 'first'
+      person.attributes.last_name = 'last'
+
+      expect(person.attributes.name).to eq 'first'
+      expect(person.attributes.last_name).to eq 'last'
+    end
+
+    it 'adds setters metters and so on' do
+      person = klass.new
+
+      person.name = 'first'
+      person.last_name = 'last'
+
+      expect(person.name).to eq 'first'
+      expect(person.last_name).to eq 'last'
+    end
   end
 
   describe '.attributes -> { attribute :attribute_name, :driver }' do
+    let(:klass) do
+      create_class do
+        attribute :name, CustomDumbAdapter.new
+        attribute :last_name, CustomDumbAdapter.new(
+          default_value: 'default last name',
+          append: 'last'
+        )
+      end
+    end
+
     describe 'with no arguments' do
       it 'creates a getter' do
-        expect(ExampleClass.new).to respond_to(:name)
-        expect(ExampleClass.new).to respond_to(:last_name)
+        expect(klass.new).to respond_to(:name)
+        expect(klass.new).to respond_to(:last_name)
       end
 
       it 'creates a setter' do
-        expect(ExampleClass.new).to respond_to(:name=)
-        expect(ExampleClass.new).to respond_to(:last_name=)
+        expect(klass.new).to respond_to(:name=)
+        expect(klass.new).to respond_to(:last_name=)
       end
 
       it 'does not create a constructor' do
         expect do
-          ExampleClass.new(name: 'foo')
+          klass.new(name: 'foo')
         end.to raise_error(ArgumentError, /wrong number of arguments/)
       end
     end
@@ -44,7 +70,7 @@ RSpec.describe Koine::Attributes do
   describe '#attributes' do
     context 'when constructor is enabled' do
       it 'returns a hash Attributes with the atrributes' do
-        subject = Location.new(lat: 123, lon: 789)
+        subject = location_class.new(lat: 123, lon: 789)
 
         expect(subject.attributes.to_h).to eq(
           lat: 123,
@@ -54,8 +80,15 @@ RSpec.describe Koine::Attributes do
     end
 
     context 'when constructor is not enabled' do
+      let(:klass) do
+        create_class(initializer: false) do
+          attribute :name, :string
+          attribute :last_name, :string
+        end
+      end
+
       it 'returns a hash Attributes with the atrributes' do
-        subject = PersonWithNoConstructor.new
+        subject = klass.new
         subject.name = 'foo'
         subject.last_name = 'bar'
 
@@ -68,14 +101,26 @@ RSpec.describe Koine::Attributes do
   end
 
   describe 'getters created by the module' do
-    subject { ExampleClass.new }
+    let(:klass) do
+      create_class do
+        attribute :name, CustomDumbAdapter.new
+        attribute :last_name, CustomDumbAdapter.new(
+          default_value: 'default last name',
+          append: 'last'
+        )
+      end
+    end
 
     it 'returns default when no value was given' do
+      subject = klass.new
+
       expect(subject.name).to eq('default value')
       expect(subject.last_name).to eq('default last name')
     end
 
     it 'returns the coerced value when values are set' do
+      subject = klass.new
+
       subject.name = 'john'
       subject.last_name = 'doe'
 
@@ -86,10 +131,17 @@ RSpec.describe Koine::Attributes do
 
   describe '.attributes initializer: option' do
     context 'when { strict: false }' do
+      let(:klass) do
+        create_class(initializer: { strict: false }) do
+          attribute :name, DumbAdapter.new
+          attribute :last_name, CustomDumbAdapter.new(append: 'last')
+        end
+      end
+
       it 'assigns attributes from the constructor but does not raise error for invalid attributes' do
         attributes = { name: 'john', 'last_name' => 'doe', foo: 'bar' }
 
-        subject = ExampleClassWithConstructor.new(attributes)
+        subject = klass.new(attributes)
 
         expect(subject.name).to eq('john-coerced')
         expect(subject.last_name).to eq('doe-last')
@@ -97,18 +149,25 @@ RSpec.describe Koine::Attributes do
     end
 
     describe 'with initializer: true' do
+      let(:klass) do
+        create_class initializer: true do
+          attribute :name, DumbAdapter.new
+          attribute :last_name, CustomDumbAdapter.new(append: 'last')
+        end
+      end
+
       it 'does not freeze object' do
-        subject = ExampleClassWithStrictConstructor.new
+        subject = klass.new
 
         expect(subject).not_to be_frozen
       end
 
       it 'can be initialized with no arguments' do
-        ExampleClassWithStrictConstructor.new
+        klass.new
       end
 
       it 'assigns valid attributes from the constructor' do
-        subject = ExampleClassWithStrictConstructor.new(
+        subject = klass.new(
           name: 'john',
           'last_name' => 'doe'
         )
@@ -126,7 +185,7 @@ RSpec.describe Koine::Attributes do
         }
 
         expect do
-          ExampleClassWithStrictConstructor.new(invalid_attributes)
+          klass.new(invalid_attributes)
         end.to raise_error(ArgumentError, 'Invalid attributes (age, likes_footbol)')
       end
     end
@@ -144,29 +203,43 @@ RSpec.describe Koine::Attributes do
   end
 
   describe '.attribute with :symbol definition' do
-    subject { ExampleWithDate.new }
+    let(:klass) do
+      create_class initializer: true do
+        attribute :date_with_object, Koine::Attributes::Adapter::Date.new.with_default_value('default_date')
+        attribute :date_with_symbol, :date
+        attribute :date_with_block_constructor, :date do |adapter|
+          adapter.with_default_value { Date.today }
+        end
+
+        attribute :date_with_lambda_constructor, :date, ->(adapter) {
+          adapter.with_default_value { Date.today }
+        }
+      end
+    end
+
+    subject { klass.new }
 
     it 'accepts adapter object' do
-      default = ExampleWithDate.new.date_with_symbol
-      coerced = ExampleWithDate.new(date_with_symbol: '2001-01-02').date_with_symbol
+      default = klass.new.date_with_symbol
+      coerced = klass.new(date_with_symbol: '2001-01-02').date_with_symbol
 
       expect(default).to eq(nil)
       expect(coerced).to eq(Date.new(2001, 0o1, 0o2))
     end
 
     it 'accepts adapter as symbol with block constructor' do
-      default = ExampleWithDate.new.date_with_block_constructor
-      coerced = ExampleWithDate.new(date_with_block_constructor: '2001-01-02')
-                               .date_with_block_constructor
+      default = klass.new.date_with_block_constructor
+      coerced = klass.new(date_with_block_constructor: '2001-01-02')
+                     .date_with_block_constructor
 
       expect(default).to eq(Date.today)
       expect(coerced).to eq(Date.new(2001, 1, 2))
     end
 
     it 'accepts adapter as symbol with lambda constructor' do
-      default = ExampleWithDate.new.date_with_lambda_constructor
-      coerced = ExampleWithDate.new(date_with_lambda_constructor: '2001-01-02')
-                               .date_with_lambda_constructor
+      default = klass.new.date_with_lambda_constructor
+      coerced = klass.new(date_with_lambda_constructor: '2001-01-02')
+                     .date_with_lambda_constructor
 
       expect(default).to eq(Date.today)
       expect(coerced).to eq(Date.new(2001, 1, 2))
@@ -174,7 +247,7 @@ RSpec.describe Koine::Attributes do
   end
 
   describe 'value object (with constructor: { freeze: true })' do
-    subject { Location.new(lat: 1, lon: 2) }
+    subject { location_class.new(lat: 1, lon: 2) }
 
     it 'freezes object' do
       expect(subject).to be_frozen
@@ -207,7 +280,7 @@ RSpec.describe Koine::Attributes do
     end
 
     it 'can be compared with other objects' do
-      new_location = Location.new(lat: 1, lon: 2)
+      new_location = location_class.new(lat: 1, lon: 2)
 
       expect(new_location).to eq(subject)
       expect(new_location.with_lat(2)).not_to eq(subject)
