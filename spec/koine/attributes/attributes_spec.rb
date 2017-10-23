@@ -42,10 +42,8 @@ RSpec.describe Koine::Attributes::Attributes do
 
   describe '#set_values' do
     it 'set values' do
-      attributes.set_values({
-        'name' => 'name',
-        last_name: 'last_name'
-      })
+      attributes.set_values('name' => 'name',
+                            last_name: 'last_name')
 
       expect(attributes.get(:name)).to eq('nameCoerced')
       expect(attributes.get(:last_name)).to eq('last_nameCoerced')
@@ -77,7 +75,7 @@ RSpec.describe Koine::Attributes::Attributes do
     end
   end
 
-  describe "#respond_to?" do
+  describe '#respond_to?' do
     it 'respond to setter getter and with*' do
       expect(attributes).to respond_to(:name)
       expect(attributes).to respond_to(:name=)
