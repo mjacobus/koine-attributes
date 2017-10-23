@@ -82,7 +82,7 @@ Options:
 
  person = Person.new(name: 'John Doe', birthday: '2001-01-31')
 
- foo: attribute will raise error
+ # foo: attribute will raise error
  person = Person.new(name: 'John Doe', birthday: '2001-01-31', foo: :bar)
  ```
 
@@ -110,6 +110,8 @@ class Product
     attribute :price, MyCustom::Money.new
     attribute :available, :boolean, ->(attribues){ attributes.with_default_value(true) }
     attribute :available, Koine::Attributes::Drivers::Boolean.new.with_default_value(true)
+    attribute :tags, array_of(:string)
+    attribute :config, hash_of(:symbol, :string)
   end
 end
 
@@ -120,6 +122,10 @@ product.available = 0
 product.available #  => false
 
 product.price = { currency: 'USD', value: 100 }
+
+product.tags = ['new']
+
+product.config = { short_url: 'http://config.url' }
 
 # or
 product.price = "100 USD"
@@ -167,11 +173,15 @@ new_location = location.with_lon(3)
 ### Standard types
 
 ```ruby
-:boolean, ->(adapter) { adapter.append_true_value('yes').append_false_value('no') }
+:any
+:array_of
+:boolean
 :date
 :float
+:hash_of
 :integer
 :string
+:symbol
 :time
 ```
 

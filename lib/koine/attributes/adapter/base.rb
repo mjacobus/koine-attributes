@@ -23,7 +23,11 @@ module Koine
         # duplicates if possible and freezes object
         def secure
           value = yield
-          value = value.dup if value.respond_to?(:dup)
+
+          unless value.is_a?(::Symbol)
+            value = value.dup if value.respond_to?(:dup)
+          end
+
           value.freeze
         end
       end

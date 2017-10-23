@@ -104,12 +104,16 @@ module Koine
     autoload :AttributesFactory, 'koine/attributes/attributes_factory'
 
     module Adapter
+      autoload :Any, 'koine/attributes/adapter/any'
+      autoload :ArrayOf, 'koine/attributes/adapter/array_of'
       autoload :Boolean, 'koine/attributes/adapter/boolean'
       autoload :Date, 'koine/attributes/adapter/date'
-      autoload :Time, 'koine/attributes/adapter/time'
       autoload :Float, 'koine/attributes/adapter/float'
+      autoload :HashOf, 'koine/attributes/adapter/hash_of'
       autoload :Integer, 'koine/attributes/adapter/integer'
       autoload :String, 'koine/attributes/adapter/string'
+      autoload :Symbol, 'koine/attributes/adapter/symbol'
+      autoload :Time, 'koine/attributes/adapter/time'
     end
 
     Error = Class.new(StandardError)
@@ -144,7 +148,7 @@ module Koine
         end
 
         block = lambda_arg || block
-        instance_variable_get(:@_attributes_factory).add_attribute(name, adapter, &block)
+        @_attributes_factory.add_attribute(name, adapter, &block)
 
         instance_eval do
           def_delegators :attributes, name, "#{name}=", "with_#{name}"
@@ -153,6 +157,17 @@ module Koine
             attributes == other.attributes
           end
         end
+      end
+
+      def array_of(item_adapter)
+        adapter = @_attributes_factory.coerce_adapter(item_adapter)
+        Adapter::ArrayOf.new(adapter)
+      end
+
+      def hash_of(key_adapter, value_adapter)
+        key_adapter = @_attributes_factory.coerce_adapter(key_adapter)
+        value_adapter = @_attributes_factory.coerce_adapter(value_adapter)
+        Adapter::HashOf.new(key_adapter, value_adapter)
       end
     end
   end
