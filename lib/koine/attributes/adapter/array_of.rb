@@ -4,6 +4,7 @@ module Koine
       class ArrayOf < Base
         def initialize(adapter)
           @adapter = adapter
+          with_default_value([])
         end
 
         def coerce(collectionOfValues)
