@@ -173,16 +173,18 @@ new_location = location.with_lon(3)
 ### Standard types
 
 ```ruby
-:any
-:array_of
-:boolean
-:date
-:float
-:hash_of
-:integer
-:string
-:symbol
-:time
+- :any
+- :array_of
+- :boolean
+- :date
+- :float
+- :hash_of
+- :integer
+- :string
+  - empty_to_nil
+  - trim_empty_spaces
+- :symbol
+- :time
 ```
 
 ### Alternative solutions
