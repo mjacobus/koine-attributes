@@ -13,12 +13,6 @@ module Koine
           @false_values = false_values
         end
 
-        def coerce(value)
-          return true if true_values.include?(value)
-          return false if false_values.include?(value)
-          raise ArgumentError, "Invalid argument '#{value}'"
-        end
-
         def append_true_value(value)
           true_values << value
           self
@@ -29,10 +23,16 @@ module Koine
           self
         end
 
-        protected
+        private
 
         attr_reader :true_values
         attr_reader :false_values
+
+        def coerce_not_nil(value)
+          return true if true_values.include?(value)
+          return false if false_values.include?(value)
+          raise ArgumentError, "Invalid argument '#{value}'"
+        end
       end
     end
   end

@@ -7,7 +7,9 @@ module Koine
           with_default_value([])
         end
 
-        def coerce(collectionOfValues)
+        private
+
+        def coerce_not_nil(collectionOfValues)
           secure do
             collectionOfValues.map { |value| @adapter.coerce(value) }
           end

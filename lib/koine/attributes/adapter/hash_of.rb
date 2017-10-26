@@ -8,7 +8,9 @@ module Koine
           with_default_value({})
         end
 
-        def coerce(hash)
+        private
+
+        def coerce_not_nil(hash)
           secure do
             {}.tap do |new_hash|
               hash.each do |key, value|

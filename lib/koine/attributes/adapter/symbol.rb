@@ -2,7 +2,9 @@ module Koine
   module Attributes
     module Adapter
       class Symbol < Base
-        def coerce(value)
+        private
+
+        def coerce_not_nil(value)
           value.to_sym
         end
       end

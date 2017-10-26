@@ -68,6 +68,12 @@ Options:
  end
 ```
 
+## Adapter's methods
+
+- with_default_value(default, &block)
+- with_nil_value(value = nil, &block)
+
+
  Also, a constructor can be created by the API
 
  ```ruby

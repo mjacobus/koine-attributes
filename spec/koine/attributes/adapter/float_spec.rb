@@ -32,4 +32,42 @@ RSpec.describe Koine::Attributes::Adapter::Float do
       end
     end
   end
+
+  describe '#with_nil_value' do
+    describe 'not set' do
+      it 'raises an exception' do
+        expect do
+          subject.coerce(nil)
+        end.to raise_error(ArgumentError, 'Cannot be nil')
+      end
+    end
+
+    describe 'set to nil' do
+      subject { described_class.new.with_nil_value }
+
+      it 'returns nil' do
+        expect(subject.coerce(nil)).to be_nil
+      end
+    end
+
+    describe 'set to 0' do
+      subject { described_class.new.with_nil_value(0) }
+
+      it 'returns 0' do
+        expect(subject.coerce(nil)).to be 0
+      end
+    end
+
+    describe 'set to a block' do
+      subject do
+        described_class.new.with_nil_value do
+          10.12
+        end
+      end
+
+      it 'returns 0' do
+        expect(subject.coerce(nil)).to eq 10.12
+      end
+    end
+  end
 end

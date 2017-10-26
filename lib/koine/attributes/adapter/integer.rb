@@ -2,7 +2,9 @@ module Koine
   module Attributes
     module Adapter
       class Integer < Base
-        def coerce(value)
+        private
+
+        def coerce_not_nil(value)
           Integer(value)
         end
       end
