@@ -7,7 +7,6 @@ RSpec.describe Koine::Attributes::Adapter::String do
   it_coerces 1.1, to: '1.1'
   it_coerces :symbol, to: 'symbol'
   it_coerces 'string', to: 'string'
-  # it_coerces nil, to: ''
 
   describe 'default value can be changed to nil' do
     before do
