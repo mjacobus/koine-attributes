@@ -2,7 +2,9 @@ module Koine
   module Attributes
     module Adapter
       class Date < Base
-        def coerce(date)
+        private
+
+        def coerce_not_nil(date)
           secure do
             next date if date.is_a?(::Date)
             next date.to_date if date.is_a?(::Time)

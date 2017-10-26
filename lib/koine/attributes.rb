@@ -77,8 +77,7 @@ require 'koine/attributes/adapter/base'
 #
 #     def initializ(attributes = {})
 #       @foo = attributes.delete(:foo)
-#
-#       initialize_attributes(attributes) # protected
+#       self.attributes.set_values(attributes)
 #     end
 #   end
 #
@@ -124,6 +123,8 @@ module Koine
     end
 
     module ClassMethods
+      private
+
       def attributes(options = {}, &block)
         @builder = true
         @_attributes_factory ||= AttributesFactory.new(options)

@@ -8,6 +8,34 @@ RSpec.describe Koine::Attributes do
     end
   end
 
+  describe '.attributes' do
+    it 'is private' do
+      expect(location_class.respond_to?(:attributes)).to be false
+      expect(location_class.respond_to?(:attributes, true)).to be true
+    end
+  end
+
+  describe '.attribute' do
+    it 'is private' do
+      expect(location_class.respond_to?(:attribute)).to be false
+      expect(location_class.respond_to?(:attribute, true)).to be true
+    end
+  end
+
+  describe '.array_of' do
+    it 'is private' do
+      expect(location_class.respond_to?(:array_of)).to be false
+      expect(location_class.respond_to?(:array_of, true)).to be true
+    end
+  end
+
+  describe '.hash_of' do
+    it 'is private' do
+      expect(location_class.respond_to?(:hash_of)).to be false
+      expect(location_class.respond_to?(:hash_of, true)).to be true
+    end
+  end
+
   describe 'class with no constructor' do
     let(:klass) do
       create_class(initializer: false) do

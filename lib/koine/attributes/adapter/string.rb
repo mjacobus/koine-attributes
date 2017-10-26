@@ -3,6 +3,7 @@ module Koine
     module Adapter
       class String < Base
         def empty_to_nil
+          with_nil_value(nil)
           @empty_to_nil = true
           self
         end
@@ -12,7 +13,9 @@ module Koine
           self
         end
 
-        def coerce(value)
+        private
+
+        def coerce_not_nil(value)
           secure do
             value = String(value)
             value = value.strip if @trim_empty_spaces
