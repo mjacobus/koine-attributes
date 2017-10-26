@@ -47,11 +47,11 @@ RSpec.describe Koine::Attributes do
     it 'sets the attributes' do
       person = klass.new
 
-      person.attributes.name = 'first'
-      person.attributes.last_name = 'last'
+      person.send(:attributes).name = 'first'
+      person.send(:attributes).last_name = 'last'
 
-      expect(person.attributes.name).to eq 'first'
-      expect(person.attributes.last_name).to eq 'last'
+      expect(person.send(:attributes).name).to eq 'first'
+      expect(person.send(:attributes).last_name).to eq 'last'
     end
 
     it 'adds setters metters and so on' do
@@ -100,7 +100,7 @@ RSpec.describe Koine::Attributes do
       it 'returns a hash Attributes with the atrributes' do
         subject = location_class.new(lat: 123, lon: 789)
 
-        expect(subject.attributes.to_h).to eq(
+        expect(subject.send(:attributes).to_h).to eq(
           lat: 123,
           lon: 789
         )
@@ -120,7 +120,7 @@ RSpec.describe Koine::Attributes do
         subject.name = 'foo'
         subject.last_name = 'bar'
 
-        expect(subject.attributes.to_h).to eq(
+        expect(subject.send(:attributes).to_h).to eq(
           name: 'foo',
           last_name: 'bar'
         )

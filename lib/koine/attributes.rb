@@ -75,7 +75,7 @@ require 'koine/attributes/adapter/base'
 #       attribute :birthday, :date
 #     end
 #
-#     def initializ(attributes = {})
+#     def initialize(attributes = {})
 #       @foo = attributes.delete(:foo)
 #       self.attributes.set_values(attributes)
 #     end
@@ -135,6 +135,8 @@ module Koine
             @_attributes ||= self.class.instance_variable_get(:@_attributes_factory).create(self)
           end
 
+          private :attributes
+
           define_method(:initialize) { |*args| attributes.initialize_values(*args) }
         end
 
@@ -155,7 +157,7 @@ module Koine
           def_delegators :attributes, name, "#{name}=", "with_#{name}"
 
           define_method :== do |other|
-            attributes == other.attributes
+            attributes == other.send(:attributes)
           end
         end
       end
