@@ -1,4 +1,3 @@
-require 'forwardable'
 require 'koine/attributes/version'
 require 'koine/attributes/adapter/base'
 
@@ -154,7 +153,17 @@ module Koine
         @_attributes_factory.add_attribute(name, adapter, &block)
 
         instance_eval do
-          def_delegators :attributes, name, "#{name}=", "with_#{name}"
+          define_method name do
+            attributes.send(name)
+          end
+
+          define_method "#{name}=" do |value|
+            attributes.send("#{name}=", value)
+          end
+
+          define_method "with_#{name}" do |value|
+            attributes.send("with_#{name}", value)
+          end
 
           define_method :== do |other|
             attributes == other.send(:attributes)
