@@ -82,3 +82,12 @@ def create_class(options = {}, &block)
     attributes(options, &block)
   end
 end
+
+class CustomGeolocation
+  include Koine::Attributes
+
+  attributes initializer: true do
+    attribute :lat, :float
+    attribute :lon, :float
+  end
+end

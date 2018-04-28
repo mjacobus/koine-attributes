@@ -137,6 +137,11 @@ module Koine
           private :attributes
 
           define_method(:initialize) { |*args| attributes.initialize_values(*args) }
+
+          define_method(:inspect) do
+            hex_id = '%x' % (object_id << 1)
+            "#<#{self.class}:0x00#{hex_id} @attributes=#{attributes.to_h.inspect}>"
+          end
         end
 
         @_attributes_factory.freeze
