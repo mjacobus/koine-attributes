@@ -314,4 +314,15 @@ RSpec.describe Koine::Attributes do
       expect(new_location.with_lat(2)).not_to eq(subject)
     end
   end
+
+  describe '#inspect' do
+    let(:object) { CustomGeolocation.new(lat: 1, lon: 2) }
+
+    it 'returns object name with attriburtes' do
+      id = '%x' % (object.object_id << 1)
+      id = "0x00#{id}"
+
+      expect(object.inspect).to match(/#<CustomGeolocation:#{id} @attributes={:lat=>1.0, :lon=>2.0}>/)
+    end
+  end
 end
