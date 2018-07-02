@@ -7,6 +7,10 @@ module Koine
           with_default_value([])
         end
 
+        def for_values
+          @adapter
+        end
+
         private
 
         def coerce_not_nil(collectionOfValues)

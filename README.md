@@ -118,6 +118,12 @@ class Product
     attribute :available, Koine::Attributes::Drivers::Boolean.new.with_default_value(true)
     attribute :tags, array_of(:string)
     attribute :config, hash_of(:symbol, :string)
+
+    # if you want to costumize the above
+    attribute :config, hash_of(:symbol, :string) do |adapter|
+      adapter.for_keys.with_nil_value
+      adapter.for_values.with_nil_value
+    end
   end
 end
 
