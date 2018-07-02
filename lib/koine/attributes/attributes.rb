@@ -14,7 +14,7 @@ module Koine
 
       def initialize_values(values = {})
         if !@initializer[:initialize] && !values.empty?
-          raise ArgumentError, "wrong number of arguments (given #{values.length}, expected 0)"
+          raise InvalidAttributesError, "wrong number of arguments (given #{values.length}, expected 0)"
         end
 
         return unless @initializer[:initialize]
@@ -30,7 +30,7 @@ module Koine
         end
 
         unless invalid_attributes.empty?
-          raise ArgumentError, "Invalid attributes (#{invalid_attributes.join(', ')})"
+          raise InvalidAttributesError, "Invalid attributes (#{invalid_attributes.join(', ')})"
         end
 
         values.each do |attribute, value|

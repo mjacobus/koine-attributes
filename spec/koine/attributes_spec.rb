@@ -90,7 +90,7 @@ RSpec.describe Koine::Attributes do
       it 'does not create a constructor' do
         expect do
           klass.new(name: 'foo')
-        end.to raise_error(Koine::Attributes::ArgumentError, /wrong number of arguments/)
+        end.to raise_error(Koine::Attributes::InvalidAttributesError, /wrong number of arguments/)
       end
     end
   end
@@ -214,7 +214,7 @@ RSpec.describe Koine::Attributes do
 
         expect do
           klass.new(invalid_attributes)
-        end.to raise_error(Koine::Attributes::ArgumentError, 'Invalid attributes (age, likes_footbol)')
+        end.to raise_error(Koine::Attributes::InvalidAttributesError, 'Invalid attributes (age, likes_footbol)')
       end
     end
   end

@@ -31,7 +31,7 @@ module Koine
         def coerce_not_nil(value)
           return true if true_values.include?(value)
           return false if false_values.include?(value)
-          raise ArgumentError, "Invalid argument '#{value}'"
+          raise InvalidAttributeError.new("Invalid argument '#{value}'", attribute_name)
         end
       end
     end
