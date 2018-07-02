@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 RSpec.describe Koine::Attributes::Adapter::Date do
+  before do
+    subject.attribute_name = 'date'
+  end
+
   it_behaves_like_an_adapter
 
   it_coerces Date.new(2001, 1, 31), to: Date.new(2001, 1, 31)

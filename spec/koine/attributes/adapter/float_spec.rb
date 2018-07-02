@@ -28,7 +28,7 @@ RSpec.describe Koine::Attributes::Adapter::Float do
 
     INVALID_ARGUMENTS.each do |value|
       it "raises InvalidArgument error with #{value}" do
-        expect { subject.coerce(value) }.to raise_error(ArgumentError)
+        expect { subject.coerce(value) }.to raise_error(Koine::Attributes::ArgumentError)
       end
     end
   end
@@ -38,7 +38,7 @@ RSpec.describe Koine::Attributes::Adapter::Float do
       it 'raises an exception' do
         expect do
           subject.coerce(nil)
-        end.to raise_error(ArgumentError, 'Cannot be nil')
+        end.to raise_error(Koine::Attributes::ArgumentError, 'Cannot be nil')
       end
     end
 

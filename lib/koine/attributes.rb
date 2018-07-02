@@ -1,5 +1,6 @@
 require 'koine/attributes/version'
 require 'koine/attributes/adapter/base'
+require 'koine/attributes/argument_error'
 
 # provides the following API
 #
@@ -139,7 +140,7 @@ module Koine
           define_method(:initialize) { |*args| attributes.initialize_values(*args) }
 
           define_method(:inspect) do
-            hex_id = '%x' % (object_id << 1)
+            hex_id = format('%x', (object_id << 1))
             "#<#{self.class}:0x00#{hex_id} @attributes=#{attributes.to_h.inspect}>"
           end
         end

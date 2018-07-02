@@ -5,7 +5,7 @@ module Koine
         private
 
         def coerce_not_nil(value)
-          Integer(value)
+          wrap_errors { Integer(value) }
         end
       end
     end

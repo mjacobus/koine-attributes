@@ -7,9 +7,11 @@ module Koine
         private
 
         def coerce_not_nil(value)
-          secure do
-            next value if value.is_a?(::Time)
-            ::Time.parse(value)
+          wrap_errors do
+            secure do
+              next value if value.is_a?(::Time)
+              ::Time.parse(value)
+            end
           end
         end
       end

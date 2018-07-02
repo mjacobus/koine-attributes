@@ -26,8 +26,10 @@ module SpecHelper
     end
 
     def it_wont_coerce(input)
-      it "raises ArgumentError with #{input}" do
-        expect { subject.coerce(input) }.to raise_error(ArgumentError)
+      it "raises Koine::Attributes::ArgumentError with #{input}" do
+        expect { subject.coerce(input) }.to raise_error do |error|
+          expect(error).to be_a(Koine::Attributes::ArgumentError)
+        end
       end
     end
 
@@ -57,6 +59,7 @@ RSpec.configure do |config|
 end
 
 class CustomDumbAdapter
+  attr_accessor :attribute_name
   attr_reader :default_value, :append
 
   def initialize(default_value: 'default value', append: 'coerced')
