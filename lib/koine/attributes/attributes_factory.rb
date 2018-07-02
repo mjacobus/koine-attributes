@@ -12,6 +12,7 @@ module Koine
 
       def add_attribute(name, adapter, &block)
         adapter = coerce_adapter(adapter)
+        adapter.attribute_name = name
         yield(adapter) if block
         @adapters[name.to_sym] = adapter.freeze
       end

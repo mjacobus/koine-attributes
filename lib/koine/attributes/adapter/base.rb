@@ -2,6 +2,12 @@ module Koine
   module Attributes
     module Adapter
       class Base
+        attr_accessor :attribute_name
+
+        def initialize
+          @attribute_name = 'AnonymousAttribute'
+        end
+
         def coerce(value)
           return coerce_nil if value.nil?
 
@@ -34,7 +40,7 @@ module Koine
             return @nil_value.respond_to?(:call) ? @nil_value.call : @nil_value
           end
 
-          raise ArgumentError, 'Cannot be nil'
+          raise ArgumentError, 'Cannot be nil', attribute_name
         end
 
         def coerce_not_nil(_value)
@@ -53,11 +59,9 @@ module Koine
         end
 
         def wrap_errors
-          begin
-            yield
-          rescue => error
-            raise ArgumentError.new(error)
-          end
+          yield
+        rescue StandardError => error
+          raise Koine::Attributes::ArgumentError.new(error, attribute_name)
         end
       end
     end

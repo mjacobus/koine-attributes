@@ -145,6 +145,8 @@ product.price = "100 USD"
 
 ```ruby
 class MyCustom::Money
+  attr_accessor :attribute_name
+
   def default_value
     return 'some default_value'
   end
