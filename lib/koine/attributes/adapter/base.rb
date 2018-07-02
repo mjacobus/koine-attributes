@@ -51,6 +51,14 @@ module Koine
 
           value.freeze
         end
+
+        def wrap_errors
+          begin
+            yield
+          rescue => error
+            raise ArgumentError.new(error)
+          end
+        end
       end
     end
   end
