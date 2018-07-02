@@ -26,9 +26,9 @@ module SpecHelper
     end
 
     def it_wont_coerce(input)
-      it "raises Koine::Attributes::ArgumentError with #{input}" do
+      it "raises Koine::Attributes::InvalidAttributeError with #{input}" do
         expect { subject.coerce(input) }.to raise_error do |error|
-          expect(error).to be_a(Koine::Attributes::ArgumentError)
+          expect(error).to be_a(Koine::Attributes::InvalidAttributeError)
         end
       end
     end

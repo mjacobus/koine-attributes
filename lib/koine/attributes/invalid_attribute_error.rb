@@ -1,16 +1,17 @@
 module Koine
   module Attributes
-    class ArgumentError < ::ArgumentError
+    class InvalidAttributeError < ::ArgumentError
       attr_reader :attribute_name
 
-      def initialize(error, attribute_name = nil)
+      def initialize(error, attribute_name)
         @attribute_name = attribute_name
 
         if error.is_a?(Exception)
-          super(error.message)
           set_backtrace(error.backtrace)
-          return
+          error = error.message
         end
+
+        error = "#{attribute_name}: #{error}" if attribute_name
 
         super(error)
       end

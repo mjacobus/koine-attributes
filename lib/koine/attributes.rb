@@ -1,6 +1,7 @@
 require 'koine/attributes/version'
 require 'koine/attributes/adapter/base'
-require 'koine/attributes/argument_error'
+require 'koine/attributes/invalid_attribute_error'
+require 'koine/attributes/invalid_attributes_error'
 
 # provides the following API
 #
