@@ -8,6 +8,14 @@ module Koine
           with_default_value({})
         end
 
+        def for_keys
+          @key_adapter
+        end
+
+        def for_values
+          @value_adapter
+        end
+
         private
 
         def coerce_not_nil(hash)
