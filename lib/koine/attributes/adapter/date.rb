@@ -9,6 +9,8 @@ module Koine
             next date if date.is_a?(::Date)
             next date.to_date if date.is_a?(::Time)
             ::Date.parse(date)
+          rescue => error
+            raise ArgumentError.new(error)
           end
         end
       end

@@ -27,7 +27,7 @@ module SpecHelper
 
     def it_wont_coerce(input)
       it "raises ArgumentError with #{input}" do
-        expect { subject.coerce(input) }.to raise_error(ArgumentError)
+        expect { subject.coerce(input) }.to raise_error(Koine::Attributes::ArgumentError)
       end
     end
 

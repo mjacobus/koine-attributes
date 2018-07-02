@@ -6,6 +6,8 @@ module Koine
 
         def coerce_not_nil(value)
           Integer(value)
+        rescue => error
+          raise ArgumentError, error
         end
       end
     end

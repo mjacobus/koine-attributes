@@ -90,7 +90,7 @@ RSpec.describe Koine::Attributes do
       it 'does not create a constructor' do
         expect do
           klass.new(name: 'foo')
-        end.to raise_error(ArgumentError, /wrong number of arguments/)
+        end.to raise_error(Koine::Attributes::ArgumentError, /wrong number of arguments/)
       end
     end
   end
@@ -214,7 +214,7 @@ RSpec.describe Koine::Attributes do
 
         expect do
           klass.new(invalid_attributes)
-        end.to raise_error(ArgumentError, 'Invalid attributes (age, likes_footbol)')
+        end.to raise_error(Koine::Attributes::ArgumentError, 'Invalid attributes (age, likes_footbol)')
       end
     end
   end
@@ -319,7 +319,7 @@ RSpec.describe Koine::Attributes do
     let(:object) { CustomGeolocation.new(lat: 1, lon: 2) }
 
     it 'returns object name with attriburtes' do
-      id = '%x' % (object.object_id << 1)
+      id = format('%x', (object.object_id << 1))
       id = "0x00#{id}"
 
       expect(object.inspect).to match(/#<CustomGeolocation:#{id} @attributes={:lat=>1.0, :lon=>2.0}>/)

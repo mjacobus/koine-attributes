@@ -10,6 +10,8 @@ module Koine
           secure do
             next value if value.is_a?(::Time)
             ::Time.parse(value)
+          rescue StandardError => error
+            raise ArgumentError, error
           end
         end
       end
