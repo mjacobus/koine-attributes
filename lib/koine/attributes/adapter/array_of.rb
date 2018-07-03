@@ -11,6 +11,11 @@ module Koine
           @adapter
         end
 
+        def with_attribute_name(name)
+          @adapter.with_attribute_name(name)
+          super(name)
+        end
+
         private
 
         def coerce_not_nil(collectionOfValues)

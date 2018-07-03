@@ -2,10 +2,10 @@ module Koine
   module Attributes
     module Adapter
       class Base
-        attr_accessor :attribute_name
+        attr_reader :attribute_name
 
         def initialize
-          @attribute_name = 'annonymous_attribute_name'
+          with_attribute_name('annonymous_attribute_name')
         end
 
         def coerce(value)
@@ -30,6 +30,11 @@ module Koine
         def with_default_value(value = nil, &block)
           @default_value = value
           @default_value = block if block
+          self
+        end
+
+        def with_attribute_name(name)
+          @attribute_name = name
           self
         end
 

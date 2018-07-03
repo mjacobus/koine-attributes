@@ -16,6 +16,12 @@ module Koine
           @value_adapter
         end
 
+        def with_attribute_name(name)
+          @key_adapter.with_attribute_name(name)
+          @value_adapter.with_attribute_name(name)
+          super(name)
+        end
+
         private
 
         def coerce_not_nil(hash)

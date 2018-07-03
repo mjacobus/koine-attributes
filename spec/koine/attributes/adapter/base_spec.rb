@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Koine::Attributes::Adapter::Base do
   subject do
     Class.new(described_class) {}.new.tap do |k|
-      k.attribute_name = 'time'
+      k.with_attribute_name('time')
     end
   end
 
@@ -37,6 +37,14 @@ RSpec.describe Koine::Attributes::Adapter::Base do
 
   specify '#coerce raises NotImplementedError' do
     expect { subject.coerce('foo') }.to raise_error(NotImplementedError)
+  end
+
+  describe '#with_attribute_name' do
+    it 'sets attribute name' do
+      name = subject.with_attribute_name('foo').attribute_name
+
+      expect(name).to eq('foo')
+    end
   end
 
   it 'raises error when unpermitted nil is set on constructor' do
