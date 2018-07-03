@@ -59,8 +59,12 @@ RSpec.configure do |config|
 end
 
 class CustomDumbAdapter
-  attr_accessor :attribute_name
-  attr_reader :default_value, :append
+  attr_reader :default_value, :append, :attribute_name
+
+  def with_attribute_name(name)
+    @attribute_name = name
+    self
+  end
 
   def initialize(default_value: 'default value', append: 'coerced')
     @default_value = default_value

@@ -35,6 +35,7 @@ module Koine
 
         def with_attribute_name(name)
           @attribute_name = name
+          self
         end
 
         private

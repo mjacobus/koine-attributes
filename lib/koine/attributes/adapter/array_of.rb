@@ -12,8 +12,8 @@ module Koine
         end
 
         def with_attribute_name(name)
-          super(name)
           @adapter.with_attribute_name(name)
+          super(name)
         end
 
         private
