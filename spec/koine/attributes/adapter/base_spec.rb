@@ -38,4 +38,26 @@ RSpec.describe Koine::Attributes::Adapter::Base do
   specify '#coerce raises NotImplementedError' do
     expect { subject.coerce('foo') }.to raise_error(NotImplementedError)
   end
+
+  it 'raises error when unpermitted nil is set on constructor' do
+    klass = create_class(initializer: true) do
+      attribute :name, :string
+    end
+
+    expect { klass.new(name: nil) }.to raise_error do |error|
+      expect(error.message).to eq 'name: Cannot be nil'
+    end
+  end
+
+  it 'raises error when unpermitted nil is set on constructor' do
+    klass = create_class do
+      attribute :name, :string
+    end
+
+    object = klass.new
+
+    expect { object.name = nil }.to raise_error do |error|
+      expect(error.message).to eq 'name: Cannot be nil'
+    end
+  end
 end
