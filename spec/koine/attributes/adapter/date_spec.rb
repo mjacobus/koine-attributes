@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Koine::Attributes::Adapter::Date do
   before do
-    subject.attribute_name = 'date'
+    subject.with_attribute_name('date')
   end
 
   it_behaves_like_an_adapter

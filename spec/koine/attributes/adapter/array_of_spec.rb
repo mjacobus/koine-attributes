@@ -29,4 +29,16 @@ RSpec.describe Koine::Attributes::Adapter::ArrayOf do
       end
     end
   end
+
+  it 'raises error with useful message when an unpermitted nil value is given' do
+    klass = create_class do
+      attribute :lang, array_of(:string)
+    end
+
+    object = klass.new
+
+    expect { object.lang = ['ruby', nil] }.to raise_error do |error|
+      expect(error.message).to eq('lang: Cannot be nil')
+    end
+  end
 end

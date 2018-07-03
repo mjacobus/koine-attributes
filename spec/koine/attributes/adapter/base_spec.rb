@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Koine::Attributes::Adapter::Base do
   subject do
     Class.new(described_class) {}.new.tap do |k|
-      k.attribute_name = 'time'
+      k.with_attribute_name('time')
     end
   end
 

@@ -33,4 +33,28 @@ RSpec.describe Koine::Attributes::Adapter::ArrayOf do
       expect(object.config).to eq(values)
     end
   end
+
+  it 'raises error with useful message when an unpermitted nil value is given as a value' do
+    klass = create_class do
+      attribute :lang, hash_of(:symbol, :string)
+    end
+
+    object = klass.new
+
+    expect { object.lang = { php: nil } }.to raise_error do |error|
+      expect(error.message).to eq('lang: Cannot be nil')
+    end
+  end
+
+  it 'raises error with useful message when an unpermitted nil value is given as key' do
+    klass = create_class do
+      attribute :lang, hash_of(:symbol, :string)
+    end
+
+    object = klass.new
+
+    expect { object.lang = { nil => 'cool' } }.to raise_error do |error|
+      expect(error.message).to eq('lang: Cannot be nil')
+    end
+  end
 end
