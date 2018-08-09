@@ -141,8 +141,8 @@ module Koine
           define_method(:initialize) { |*args| attributes.initialize_values(*args) }
 
           define_method(:inspect) do
-            hex_id = format('%x', (object_id << 1))
-            "#<#{self.class}:0x0000#{hex_id} @attributes=#{attributes.to_h.inspect}>"
+            string = Object.instance_method(:inspect).bind(self).call.split(':')[1].split(' ').first
+            "#<#{self.class}:#{string} @attributes=#{attributes.to_h.inspect}>"
           end
         end
 
