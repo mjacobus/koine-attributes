@@ -142,7 +142,7 @@ module Koine
 
           define_method(:inspect) do
             hex_id = format('%x', (object_id << 1))
-            "#<#{self.class}:0x00#{hex_id} @attributes=#{attributes.to_h.inspect}>"
+            "#<#{self.class}:0x0000#{hex_id} @attributes=#{attributes.to_h.inspect}>"
           end
         end
 
