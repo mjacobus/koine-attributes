@@ -318,11 +318,13 @@ RSpec.describe Koine::Attributes do
   describe '#inspect' do
     let(:object) { CustomGeolocation.new(lat: 1, lon: 2) }
 
-    it 'returns object name with attriburtes' do
-      id = format('%x', (object.object_id << 1))
-      id = "0x00#{id}"
+    it 'returns object with correct id and attributes only' do
+      original_inspect = Object.instance_method(:inspect).bind(object).call
 
-      expect(object.inspect).to match(/#<CustomGeolocation:#{id} @attributes={:lat=>1.0, :lon=>2.0}>/)
+      original_id = original_inspect.split(':')[1].split(' ').first
+      overloaded_id = object.inspect.split(':')[1].split(' ').first
+
+      expect(overloaded_id).to eq(original_id)
     end
   end
 end
