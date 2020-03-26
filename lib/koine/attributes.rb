@@ -1,7 +1,20 @@
+require 'forwardable'
 require 'koine/attributes/version'
 require 'koine/attributes/adapter/base'
 require 'koine/attributes/invalid_attribute_error'
 require 'koine/attributes/invalid_attributes_error'
+require 'koine/attributes/attributes'
+require 'koine/attributes/attributes_factory'
+require 'koine/attributes/adapter/any'
+require 'koine/attributes/adapter/array_of'
+require 'koine/attributes/adapter/boolean'
+require 'koine/attributes/adapter/date'
+require 'koine/attributes/adapter/float'
+require 'koine/attributes/adapter/hash_of'
+require 'koine/attributes/adapter/integer'
+require 'koine/attributes/adapter/string'
+require 'koine/attributes/adapter/symbol'
+require 'koine/attributes/adapter/time'
 
 # provides the following API
 #
@@ -100,21 +113,6 @@ require 'koine/attributes/invalid_attributes_error'
 #
 module Koine
   module Attributes
-    autoload :Attributes, 'koine/attributes/attributes'
-    autoload :AttributesFactory, 'koine/attributes/attributes_factory'
-
-    module Adapter
-      autoload :Any, 'koine/attributes/adapter/any'
-      autoload :ArrayOf, 'koine/attributes/adapter/array_of'
-      autoload :Boolean, 'koine/attributes/adapter/boolean'
-      autoload :Date, 'koine/attributes/adapter/date'
-      autoload :Float, 'koine/attributes/adapter/float'
-      autoload :HashOf, 'koine/attributes/adapter/hash_of'
-      autoload :Integer, 'koine/attributes/adapter/integer'
-      autoload :String, 'koine/attributes/adapter/string'
-      autoload :Symbol, 'koine/attributes/adapter/symbol'
-      autoload :Time, 'koine/attributes/adapter/time'
-    end
 
     Error = Class.new(StandardError)
 
