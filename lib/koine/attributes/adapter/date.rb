@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Koine
   module Attributes
     module Adapter
@@ -9,6 +11,7 @@ module Koine
             secure do
               next date if date.is_a?(::Date)
               next date.to_date if date.is_a?(::Time)
+
               ::Date.parse(date)
             end
           end

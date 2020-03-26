@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'forwardable'
 require 'koine/attributes/version'
 require 'koine/attributes/adapter/base'
@@ -113,7 +115,6 @@ require 'koine/attributes/adapter/time'
 #
 module Koine
   module Attributes
-
     Error = Class.new(StandardError)
 
     def self.included(base)

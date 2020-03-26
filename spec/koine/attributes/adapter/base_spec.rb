@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Koine::Attributes::Adapter::Base do
@@ -57,7 +59,7 @@ RSpec.describe Koine::Attributes::Adapter::Base do
     end
   end
 
-  it 'raises error when unpermitted nil is set on constructor' do
+  it 'raises error when unpermitted nil is set' do
     klass = create_class do
       attribute :name, :string
     end

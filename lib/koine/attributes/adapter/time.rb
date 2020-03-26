@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'time'
 
 module Koine
@@ -10,6 +12,7 @@ module Koine
           wrap_errors do
             secure do
               next value if value.is_a?(::Time)
+
               ::Time.parse(value)
             end
           end

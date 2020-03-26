@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Koine
   module Attributes
     class AttributesFactory
@@ -19,6 +21,7 @@ module Koine
 
       def coerce_adapter(adapter)
         return adapter unless adapter.instance_of?(::Symbol)
+
         Object.const_get("Koine::Attributes::Adapter::#{adapter.to_s.capitalize}").new
       end
 

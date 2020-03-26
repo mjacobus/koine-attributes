@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Koine::Attributes do
@@ -219,18 +221,18 @@ RSpec.describe Koine::Attributes do
     end
   end
 
-  describe '.attribute' do
-    it 'raises error when called outside the .attributes block' do
-      expect do
-        Class.new do
-          include Koine::Attributes
-          attribute :name, :adapter
-        end
-      end.to raise_error(Koine::Attributes::Error, 'You must call .attribute inside the .attributes block')
-    end
+  it 'raises error when attribute is called outside the .attributes block' do
+    expect do
+      Class.new do
+        include Koine::Attributes
+        attribute :name, :adapter
+      end
+    end.to raise_error(Koine::Attributes::Error, 'You must call .attribute inside the .attributes block')
   end
 
   describe '.attribute with :symbol definition' do
+    subject { klass.new }
+
     let(:klass) do
       create_class initializer: true do
         attribute :date_with_object, Koine::Attributes::Adapter::Date.new.with_default_value('default_date')
@@ -239,13 +241,11 @@ RSpec.describe Koine::Attributes do
           adapter.with_default_value { Date.today }
         end
 
-        attribute :date_with_lambda_constructor, :date, ->(adapter) {
+        attribute :date_with_lambda_constructor, :date, lambda { |adapter|
           adapter.with_default_value { Date.today }
         }
       end
     end
-
-    subject { klass.new }
 
     it 'accepts adapter object' do
       default = klass.new.date_with_symbol
@@ -258,7 +258,7 @@ RSpec.describe Koine::Attributes do
     it 'accepts adapter as symbol with block constructor' do
       default = klass.new.date_with_block_constructor
       coerced = klass.new(date_with_block_constructor: '2001-01-02')
-                     .date_with_block_constructor
+        .date_with_block_constructor
 
       expect(default).to eq(Date.today)
       expect(coerced).to eq(Date.new(2001, 1, 2))
@@ -267,7 +267,7 @@ RSpec.describe Koine::Attributes do
     it 'accepts adapter as symbol with lambda constructor' do
       default = klass.new.date_with_lambda_constructor
       coerced = klass.new(date_with_lambda_constructor: '2001-01-02')
-                     .date_with_lambda_constructor
+        .date_with_lambda_constructor
 
       expect(default).to eq(Date.today)
       expect(coerced).to eq(Date.new(2001, 1, 2))

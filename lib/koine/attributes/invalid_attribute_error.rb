@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Koine
   module Attributes
     class InvalidAttributeError < ::ArgumentError

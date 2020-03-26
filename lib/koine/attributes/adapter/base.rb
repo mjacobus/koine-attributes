@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Koine
   module Attributes
     module Adapter
@@ -65,8 +67,8 @@ module Koine
 
         def wrap_errors
           yield
-        rescue StandardError => error
-          raise_error(error)
+        rescue StandardError => exception
+          raise_error(exception)
         end
 
         def raise_error(message)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Koine::Attributes::Adapter::String do
@@ -16,7 +18,7 @@ RSpec.describe Koine::Attributes::Adapter::String do
     it_coerces nil, to: nil, skip_dup: true
   end
 
-  describe 'default value can be changed to nil' do
+  describe 'trims whitespaces' do
     before do
       subject.trim_empty_spaces.empty_to_nil
     end

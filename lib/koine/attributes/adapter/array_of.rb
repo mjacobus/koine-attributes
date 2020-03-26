@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Koine
   module Attributes
     module Adapter
@@ -18,9 +20,9 @@ module Koine
 
         private
 
-        def coerce_not_nil(collectionOfValues)
+        def coerce_not_nil(collection_of_values)
           secure do
-            collectionOfValues.map { |value| @adapter.coerce(value) }
+            collection_of_values.map { |value| @adapter.coerce(value) }
           end
         end
       end

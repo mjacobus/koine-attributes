@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Koine
   module Attributes
     module Adapter
@@ -20,6 +22,7 @@ module Koine
             value = String(value)
             value = value.strip if @trim_empty_spaces
             return nil if value.empty? && @empty_to_nil
+
             value
           end
         end

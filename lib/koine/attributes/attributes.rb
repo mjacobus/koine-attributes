@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Koine
   module Attributes
     class Attributes
@@ -18,6 +20,7 @@ module Koine
         end
 
         return unless @initializer[:initialize]
+
         set_values(values) && @initializer[:freeze] && freeze
       end
 
